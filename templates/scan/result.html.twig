@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Scan Resultaat — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold mb-4">Scan resultaat</h1>
+    <p class="text-gray-600 mb-6">Website: <strong>{{ scan.websiteUrl }}</strong></p>
+
+    <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <div class="text-5xl font-bold text-[#1E6B3A] mb-2">{{ scan.results.score ?? 'N/A' }}/100</div>
+        <p class="text-gray-600">AI Zichtbaarheid Score</p>
+    </div>
+
+    {% if scan.type == 'paid' and scan.status != 'paid' %}
+        <div class="p-4 bg-yellow-50 rounded-lg mb-6">
+            Betaling wordt verwerkt. Vernieuw de pagina over een paar seconden.
+        </div>
+    {% endif %}
+
+    {% if scan.results.recommendations is defined %}
+        <h2 class="font-bold text-xl mb-3">Aanbevelingen</h2>
+        <ul class="space-y-2">
+            {% for rec in scan.results.recommendations %}
+                <li class="flex items-start gap-2">
+                    <span class="text-[#1E6B3A]">✓</span> {{ rec }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% elseif scan.results.points is defined %}
+        <h2 class="font-bold text-xl mb-3">Belangrijkste punten</h2>
+        <ul class="space-y-2">
+            {% for point in scan.results.points %}
+                <li>• {{ point }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="mt-10 text-center">
+        <a href="{{ path('app_scan') }}" class="text-[#1E6B3A] font-medium">← Terug naar scans</a>
+    </div>
+</div>
+{% endblock %}
