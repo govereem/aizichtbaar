@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AIzichtbaar{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .btn-primary { background: #1E6B3A; }
+        .btn-primary:hover { background: #14532D; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="{{ path('app_home') }}" class="flex items-center gap-3">
+                <img src="/images/logo.svg" alt="AIzichtbaar" class="h-8">
+                <span class="text-xl font-bold text-[#1E6B3A]">AIzichtbaar</span>
+            </a>
+            <nav class="space-x-6">
+                <a href="{{ path('app_scan') }}" class="text-[#1E6B3A] font-medium">Scans</a>
+                <a href="#" class="text-gray-600">Inloggen</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block body %}{% endblock %}
+    </main>
+
+    <footer class="bg-[#1E6B3A] text-white py-8 text-center mt-16">
+        <p>© {{ "now"|date("Y") }} AIzichtbaar — Maak je zichtbaar in AI.</p>
+    </footer>
+</body>
+</html>
