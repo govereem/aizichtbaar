@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gratis AI Scan — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold mb-4">Gratis AI Zichtbaarheid Scan</h1>
+    <p class="text-gray-600 mb-8">
+        Ontdek in een paar minuten of AI-systemen jouw website kunnen vinden en citeren. 
+        Je krijgt een score en 3 concrete verbeterpunten.
+    </p>
+
+    <form method="post" class="space-y-4">
+        <div>
+            <label class="block font-medium mb-1">Website URL</label>
+            <input type="url" name="website" required placeholder="https://jouwwebsite.nl"
+                   class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]">
+        </div>
+        <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
+            Start gratis scan
+        </button>
+    </form>
+
+    <div class="mt-10 p-4 bg-green-50 rounded-lg text-sm">
+        <strong>Wat krijg je?</strong><br>
+        Een snelle check op AI-crawlers, contentstructuur en basis entity-signalen. Perfect om te zien of je al op de goede weg bent.
+    </div>
+</div>
+{% endblock %}
