@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AI Zichtbaarheid Scan — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-center mb-4 text-[#1E6B3A]">AI Zichtbaarheid Scan</h1>
+    <p class="text-center text-lg text-gray-600 mb-12">Ontdek hoe zichtbaar jouw website is in ChatGPT, Perplexity en Google AI.</p>
+
+    <div class="grid md:grid-cols-2 gap-8">
+        <div class="border rounded-xl p-8 bg-white shadow-sm">
+            <h2 class="text-2xl font-bold mb-3">Gratis Scan</h2>
+            <p class="text-3xl font-bold text-[#1E6B3A] mb-4">€0</p>
+            <ul class="space-y-2 mb-6 text-gray-700">
+                <li>✓ Snelle basischeck</li>
+                <li>✓ 3 belangrijke punten</li>
+                <li>✓ Score op AI-zichtbaarheid</li>
+            </ul>
+            <a href="{{ path('app_scan_free') }}" class="block text-center btn-primary text-white py-3 rounded-lg font-semibold">Start gratis scan</a>
+        </div>
+
+        <div class="border-2 border-[#1E6B3A] rounded-xl p-8 bg-white shadow-md relative">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1E6B3A] text-white text-xs px-3 py-1 rounded-full">Aanbevolen</div>
+            <h2 class="text-2xl font-bold mb-3">Uitgebreide Scan</h2>
+            <p class="text-3xl font-bold text-[#1E6B3A] mb-4">€49</p>
+            <ul class="space-y-2 mb-6 text-gray-700">
+                <li>✓ Alles van de gratis scan</li>
+                <li>✓ Diepgaande analyse</li>
+                <li>✓ Concrete actiepunten</li>
+                <li>✓ Content-suggesties voor AI</li>
+                <li>✓ Rapport per e-mail</li>
+            </ul>
+            <a href="{{ path('app_scan_paid') }}" class="block text-center btn-primary text-white py-3 rounded-lg font-semibold">Koop uitgebreide scan</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
