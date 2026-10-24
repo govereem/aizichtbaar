@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Uitgebreide AI Scan €49 — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold mb-2">Uitgebreide AI Zichtbaarheid Scan</h1>
+    <p class="text-4xl font-bold text-[#1E6B3A] mb-6">€49</p>
+
+    <div class="prose max-w-none mb-8">
+        <h2>Waarom deze scan?</h2>
+        <p>Steeds meer klanten vragen ChatGPT, Perplexity of Google AI wie ze moeten kiezen. Als jouw website daar niet in voorkomt, mis je klanten — zelfs als je goed rankt in Google.</p>
+
+        <h3>Wat zit erin?</h3>
+        <ul>
+            <li><strong>Diepgaande AI-audit</strong> – We checken of AI-crawlers toegang hebben, of je content citeerbaar is en hoe consistent je merk is.</li>
+            <li><strong>Score + concurrentie-inzicht</strong> – Zie hoe je scoort en waar concurrenten je voorbijstreven.</li>
+            <li><strong>Concrete actiepunten</strong> – Geen vage adviezen, maar precies wat je moet aanpassen.</li>
+            <li><strong>Content-suggesties</strong> – Voorbeelden van answer-first teksten die AI graag citeert.</li>
+            <li><strong>Rapport per e-mail</strong> – Alles overzichtelijk op een rij, zodat je (of je bureau) direct aan de slag kan.</li>
+        </ul>
+
+        <h3>Waarom je dit wilt</h3>
+        <p>Een eenmalige investering van €49 geeft je duidelijkheid over een kanaal waar steeds meer zoekgedrag naartoe verschuift. Het is de snelste manier om te zien of je klaar bent voor AI-zoekmachines — en wat je moet doen om daar zichtbaar te worden.</p>
+    </div>
+
+    <form method="post" class="space-y-4 bg-white p-6 rounded-xl shadow">
+        <div>
+            <label class="block font-medium mb-1">Website URL</label>
+            <input type="url" name="website" required placeholder="https://jouwwebsite.nl"
+                   class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]">
+        </div>
+        <button type="submit" class="w-full btn-primary text-white py-4 rounded-lg font-semibold text-lg">
+            Betaal €49 en start de scan
+        </button>
+        <p class="text-xs text-center text-gray-500">Veilig betalen via Mollie (iDEAL, creditcard, etc.)</p>
+    </form>
+</div>
+{% endblock %}
