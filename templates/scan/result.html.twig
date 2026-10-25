@@ -3,41 +3,119 @@
 {% block title %}Scan Resultaat — AIzichtbaar{% endblock %}
 
 {% block body %}
-<div class="max-w-2xl mx-auto px-4 py-16">
-    <h1 class="text-3xl font-bold mb-4">Scan resultaat</h1>
-    <p class="text-gray-600 mb-6">Website: <strong>{{ scan.websiteUrl }}</strong></p>
-
-    <div class="bg-white p-6 rounded-xl shadow mb-6">
-        <div class="text-5xl font-bold text-[#1E6B3A] mb-2">{{ scan.results.score ?? 'N/A' }}/100</div>
-        <p class="text-gray-600">AI Zichtbaarheid Score</p>
+<div class="max-w-3xl mx-auto px-4 py-12">
+    <div class="mb-6">
+        <a href="{{ path('app_scan') }}" class="text-[#1E6B3A] text-sm font-medium">← Terug naar scans</a>
     </div>
 
-    {% if scan.type == 'paid' and scan.status != 'paid' %}
-        <div class="p-4 bg-yellow-50 rounded-lg mb-6">
-            Betaling wordt verwerkt. Vernieuw de pagina over een paar seconden.
+    <div class="bg-white rounded-2xl shadow-sm border p-8 mb-8">
+        <div class="flex items-center justify-between mb-2">
+            <h1 class="text-2xl font-bold">
+                {% if scan.type == 'paid' %}Uitgebreide AI Scan{% else %}Gratis AI Scan{% endif %}
+            </h1>
+            {% if scan.type == 'free' %}
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Gratis</span>
+            {% else %}
+                <span class="text-xs bg-green-100 text-[#1E6B3A] px-2 py-1 rounded-full">Volledig rapport</span>
+            {% endif %}
+        </div>
+        <p class="text-gray-500 text-sm mb-6">{{ scan.websiteUrl }}</p>
+
+        <div class="flex items-center gap-8 mb-8">
+            <div class="text-center">
+                <div class="text-6xl font-bold text-[#1E6B3A]">{{ scan.results.score ?? '—' }}</div>
+                <div class="text-gray-500 text-sm">/ 100</div>
+            </div>
+            <div>
+                <p class="font-medium">{{ scan.results.summary ?? 'Scan voltooid' }}</p>
+                {% if scan.type == 'free' %}
+                    <p class="text-sm text-gray-500 mt-1">Dit is een snelle basischeck. De uitgebreide scan geeft concrete acties en voorbeelden.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if scan.type == 'paid' and scan.status != 'paid' %}
+            <div class="p-4 bg-yellow-50 rounded-lg text-sm mb-6">
+                Betaling wordt nog verwerkt. Vernieuw de pagina zo.
+            </div>
+        {% endif %}
+    </div>
+
+    {# GRATIS RESULTAAT #}
+    {% if scan.type == 'free' and scan.results.points is defined %}
+        <div class="space-y-3 mb-8">
+            {% for point in scan.results.points %}
+                <div class="bg-white border rounded-xl p-4 flex gap-4">
+                    <div class="text-2xl">
+                        {% if point.status == 'ok' %}✅{% elseif point.status == 'warning' %}⚠️{% else %}❌{% endif %}
+                    </div>
+                    <div>
+                        <div class="font-semibold">{{ point.title }}</div>
+                        <div class="text-sm text-gray-600">{{ point.text }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
+            <h3 class="font-bold text-lg mb-2">Wil je weten wat je precies moet doen?</h3>
+            <p class="text-gray-600 mb-4 text-sm">De uitgebreide scan van €49 geeft concrete actiepunten, impact-indicatie en contentvoorbeelden.</p>
+            <a href="{{ path('app_scan_paid') }}" class="inline-block btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                Bekijk de uitgebreide scan →
+            </a>
+        </div>
+
+    {# BETAALDE RESULTAAT #}
+    {% elseif scan.type == 'paid' and scan.results.actions is defined %}
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Diepgaande analyse</h2>
+            <div class="space-y-3">
+                {% for item in scan.results.analysis %}
+                    <div class="bg-white border rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span>
+                                {% if item.status == 'ok' %}✅{% elseif item.status == 'warning' %}⚠️{% else %}❌{% endif %}
+                            </span>
+                            <span class="font-semibold">{{ item.title }}</span>
+                        </div>
+                        <p class="text-sm text-gray-600">{{ item.detail }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Concrete actiepunten</h2>
+            <div class="space-y-3">
+                {% for action in scan.results.actions %}
+                    <div class="bg-white border rounded-xl p-4 flex justify-between items-start gap-4">
+                        <div>
+                            <div class="font-semibold">{{ action.title }}</div>
+                            <p class="text-sm text-gray-600 mt-1">{{ action.text }}</p>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded-full whitespace-nowrap
+                            {% if action.impact == 'Hoog' %}bg-red-100 text-red-700
+                            {% elseif action.impact == 'Medium' %}bg-yellow-100 text-yellow-700
+                            {% else %}bg-gray-100 text-gray-700{% endif %}">
+                            {{ action.impact }} impact
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if scan.results.content_example is defined %}
+            <div class="bg-white border rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-3">Content voorbeeld</h2>
+                <div class="text-sm font-medium text-[#1E6B3A] mb-1">{{ scan.results.content_example.title }}</div>
+                <p class="text-gray-700 italic">“{{ scan.results.content_example.text }}”</p>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div class="text-center text-gray-500 py-8">
+            Resultaat wordt geladen…
         </div>
     {% endif %}
-
-    {% if scan.results.recommendations is defined %}
-        <h2 class="font-bold text-xl mb-3">Aanbevelingen</h2>
-        <ul class="space-y-2">
-            {% for rec in scan.results.recommendations %}
-                <li class="flex items-start gap-2">
-                    <span class="text-[#1E6B3A]">✓</span> {{ rec }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% elseif scan.results.points is defined %}
-        <h2 class="font-bold text-xl mb-3">Belangrijkste punten</h2>
-        <ul class="space-y-2">
-            {% for point in scan.results.points %}
-                <li>• {{ point }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <div class="mt-10 text-center">
-        <a href="{{ path('app_scan') }}" class="text-[#1E6B3A] font-medium">← Terug naar scans</a>
-    </div>
 </div>
 {% endblock %}
