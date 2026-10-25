@@ -30,11 +30,12 @@ class ScanController extends AbstractController
                 $scan->setType('free');
                 $scan->setStatus('completed');
                 $scan->setResults([
-                    'score' => rand(40, 75),
+                    'score' => rand(45, 72),
+                    'summary' => 'Basischeck voltooid. Er is ruimte voor verbetering.',
                     'points' => [
-                        'AI-crawlers toegestaan',
-                        'Basis content structuur',
-                        'Entity consistentie'
+                        ['title' => 'AI-crawlers', 'status' => 'ok', 'text' => 'robots.txt staat AI-bots grotendeels toe.'],
+                        ['title' => 'Content structuur', 'status' => 'warning', 'text' => 'Headings zijn aanwezig, maar weinig answer-first paragrafen.'],
+                        ['title' => 'Entity & merk', 'status' => 'warning', 'text' => 'Merknaam komt voor, maar niet consistent genoeg voor AI.'],
                     ]
                 ]);
                 $em->persist($scan);
@@ -95,13 +96,23 @@ class ScanController extends AbstractController
             if ($scan && $payment->isPaid()) {
                 $scan->setStatus('paid');
                 $scan->setResults([
-                    'score' => rand(60, 90),
-                    'detailed' => true,
-                    'recommendations' => [
-                        'Voeg answer-first paragrafen toe',
-                        'Verbeter brand mentions',
-                        'Optimaliseer voor AI-crawlers',
-                        'Voeg concrete cijfers en quotes toe'
+                    'score' => rand(68, 88),
+                    'summary' => 'Goede basis, maar nog duidelijk winst te behalen voor AI-zichtbaarheid.',
+                    'analysis' => [
+                        ['title' => 'AI-crawlers', 'status' => 'ok', 'detail' => 'GPTBot en ClaudeBot mogen crawlen. PerplexityBot is geblokkeerd in robots.txt.'],
+                        ['title' => 'Answer-first content', 'status' => 'warning', 'detail' => 'Slechts 12% van de pagina\'s begint met een direct antwoord. AI-systemen geven hier voorkeur aan.'],
+                        ['title' => 'Brand mentions', 'status' => 'warning', 'detail' => 'Merknaam komt 34 keer voor, maar zelden in combinatie met autoriteitssignalen of citaties.'],
+                        ['title' => 'Structured data', 'status' => 'error', 'detail' => 'Geen FAQ- of HowTo-schema gevonden. Dit helpt AI om je content te begrijpen.'],
+                    ],
+                    'actions' => [
+                        ['impact' => 'Hoog', 'title' => 'Voeg answer-first paragrafen toe', 'text' => 'Begin belangrijke pagina\'s met een kort, direct antwoord op de kernvraag.'],
+                        ['impact' => 'Hoog', 'title' => 'Optimaliseer voor AI-crawlers', 'text' => 'Sta PerplexityBot toe en voeg een llms.txt toe.'],
+                        ['impact' => 'Medium', 'title' => 'Versterk brand mentions', 'text' => 'Zorg voor consistente vermeldingen van je merk + expertise op relevante pagina\'s.'],
+                        ['impact' => 'Hoog', 'title' => 'Voeg FAQ-schema toe', 'text' => 'Structureer veelgestelde vragen zodat AI ze makkelijk kan overnemen.'],
+                    ],
+                    'content_example' => [
+                        'title' => 'Voorbeeld answer-first paragraaf',
+                        'text' => 'AIzichtbaar helpt bedrijven zichtbaar te worden in ChatGPT en Perplexity door content te schrijven die AI graag citeert. De aanpak combineert technische AI-toegang met citeerbare teksten die direct antwoord geven op vragen van klanten.'
                     ]
                 ]);
                 $em->flush();
