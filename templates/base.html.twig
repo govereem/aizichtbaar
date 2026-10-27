@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AIzichtbaar{% endblock %}</title>
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .btn-primary { background: #1E6B3A; }
@@ -19,10 +21,34 @@
             </a>
             <nav class="space-x-6">
                 <a href="{{ path('app_scan') }}" class="text-[#1E6B3A] font-medium">Scans</a>
-                <a href="#" class="text-gray-600">Inloggen</a>
+                {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_admin_users') }}" class="text-gray-600">Beheer</a>
+                    {% endif %}
+                    <a href="{{ path('app_dashboard') }}" class="text-gray-600">Dashboard</a>
+                    <a href="{{ path('app_logout') }}" class="text-gray-600">Uitloggen</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="text-gray-600">Inloggen</a>
+                    <a href="{{ path('app_register') }}" class="btn-primary text-white px-4 py-2 rounded-lg">Registreren</a>
+                {% endif %}
             </nav>
         </div>
     </header>
+
+    {% if is_granted('IS_IMPERSONATOR') %}
+        <div class="bg-amber-100 text-amber-900 text-center px-4 py-2 text-sm">
+            Je bekijkt AIzichtbaar als {{ app.user.userIdentifier }}.
+            <a href="{{ impersonation_exit_path(path('app_admin_users')) }}" class="font-semibold underline">Terug naar beheerder</a>
+        </div>
+    {% endif %}
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="max-w-xl mx-auto px-4 mt-6">
+                <div class="px-4 py-3 rounded-lg {{ label == 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800' }}" role="alert">{{ message }}</div>
+            </div>
+        {% endfor %}
+    {% endfor %}
 
     <main>
         {% block body %}{% endblock %}

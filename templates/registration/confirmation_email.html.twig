@@ -1,0 +1,22 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Bevestig je e-mailadres — AIzichtbaar{% endblock %}
+
+{% block content %}
+    <h1 style="margin:0 0 16px 0; font-size:24px; color:#111827;">Welkom bij AIzichtbaar!</h1>
+
+    <p style="margin:0;">Bevestig je e-mailadres door op onderstaande knop te klikken:</p>
+
+    {% include 'email/_button.html.twig' with {url: signature.signedUrl, label: 'E-mailadres bevestigen'} %}
+
+    <p style="margin:0 0 16px 0; font-size:13px; color:#6b7280;">
+        Werkt de knop niet? Kopieer dan deze link in je browser:<br>
+        <a href="{{ signature.signedUrl }}" style="color:#1E6B3A; word-break:break-all;">{{ signature.signedUrl }}</a>
+    </p>
+
+    <p style="margin:0 0 16px 0;">Deze link is {{ signature.expirationMessageKey|trans(signature.expirationMessageData, 'VerifyEmailBundle') }} geldig.</p>
+
+    <p style="margin:0 0 16px 0;">Heb je geen account aangemaakt? Dan kun je deze e-mail negeren.</p>
+
+    <p style="margin:0;">Groet,<br>Het AIzichtbaar-team</p>
+{% endblock %}

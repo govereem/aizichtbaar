@@ -30,6 +30,10 @@ class Scan
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $results = null;
 
+    #[ORM\ManyToOne(inversedBy: 'scans')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -47,4 +51,6 @@ class Scan
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getResults(): ?array { return $this->results; }
     public function setResults(?array $results): static { $this->results = $results; return $this; }
+    public function getUser(): ?User { return $this->user; }
+    public function setUser(?User $user): static { $this->user = $user; return $this; }
 }

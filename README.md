@@ -12,7 +12,7 @@ Low-entry platform voor Nederlandse ondernemers. Geef je website door, de rest d
 ## Features
 - **Gratis AI Zichtbaarheid Scan** – Snelle basischeck met score en 3 punten
 - **Uitgebreide Scan €49** – Diepgaande analyse + concrete actiepunten + content-suggesties (Mollie-ready)
-- Gebruikerslogin-structuur (Symfony Security)
+- Accounts: registreren met e-mailbevestiging, inloggen, wachtwoord vergeten (e-mail), dashboard met je scans
 - Responsive design met Tailwind CSS
 - Klaar voor Mollie-betalingen
 
@@ -29,7 +29,7 @@ composer install
 cp .env .env.local
 # Zet MOLLIE_API_KEY=test_... in .env.local
 php bin/console doctrine:database:create --if-not-exists
-php bin/console doctrine:schema:update --force
+php bin/console doctrine:migrations:migrate --no-interaction
 symfony server:start
 # of: php -S localhost:8000 -t public
 ```

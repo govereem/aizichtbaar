@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gebruikers — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 py-16">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-[#1E6B3A]">Gebruikers</h1>
+        <a href="{{ path('app_admin_scan_new') }}" class="btn-primary text-white px-4 py-2 rounded-lg font-semibold">Uitgebreide scan aanmaken</a>
+    </div>
+
+    <ul class="space-y-4">
+        {% for user in users %}
+            <li class="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="font-semibold">{{ user.email }}</p>
+                    <p class="text-sm text-gray-500">
+                        {{ user.isVerified ? 'Geverifieerd' : 'Niet geverifieerd' }} · {{ user.scans|length }} scan(s)
+                        {{ 'ROLE_ADMIN' in user.roles ? ' · Beheerder' : '' }}
+                    </p>
+                </div>
+                <a href="{{ path('app_dashboard', {'_switch_user': user.email}) }}" class="text-[#1E6B3A] font-medium hover:underline">Overnemen</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

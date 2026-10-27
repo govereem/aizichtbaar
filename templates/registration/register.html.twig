@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registreren — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold text-[#1E6B3A] mb-8">Account aanmaken</h1>
+
+    {{ form_start(registrationForm, {attr: {class: 'bg-white p-8 rounded-xl shadow-sm space-y-6'}}) }}
+        {{ form_row(registrationForm.email, {label_attr: {class: 'block font-medium mb-2'}, attr: {class: 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A] focus:outline-none'}}) }}
+        {{ form_row(registrationForm.plainPassword.first, {label_attr: {class: 'block font-medium mb-2'}, attr: {class: 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A] focus:outline-none'}}) }}
+        {{ form_row(registrationForm.plainPassword.second, {label_attr: {class: 'block font-medium mb-2'}, attr: {class: 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A] focus:outline-none'}}) }}
+        {{ form_row(registrationForm.agreeTerms, {label_attr: {class: 'ml-2'}, attr: {class: 'h-4 w-4 accent-[#1E6B3A]'}}) }}
+
+        <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Account aanmaken</button>
+    {{ form_end(registrationForm) }}
+
+    <p class="mt-6 text-center text-gray-600">
+        Heb je al een account? <a href="{{ path('app_login') }}" class="text-[#1E6B3A] font-medium hover:underline">Inloggen</a>
+    </p>
+</div>
+{% endblock %}

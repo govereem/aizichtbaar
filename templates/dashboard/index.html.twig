@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 py-16">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-[#1E6B3A]">Mijn scans</h1>
+        <a href="{{ path('app_scan') }}" class="btn-primary text-white px-4 py-2 rounded-lg font-semibold">Nieuwe scan</a>
+    </div>
+
+    {% if scans is empty %}
+        <div class="bg-white p-8 rounded-xl shadow-sm text-center text-gray-600">
+            Je hebt nog geen scans. Start je eerste scan om te zien hoe zichtbaar je website is voor AI.
+        </div>
+    {% else %}
+        <ul class="space-y-4">
+            {% for scan in scans %}
+                <li class="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="font-semibold">{{ scan.websiteUrl }}</p>
+                        <p class="text-sm text-gray-500">
+                            {{ scan.createdAt|date('d-m-Y H:i') }} · {{ scan.type == 'paid' ? 'Uitgebreide scan' : 'Gratis scan' }} ·
+                            {{ scan.status == 'pending' ? 'In afwachting van betaling' : (scan.status == 'paid' ? 'Betaald' : 'Afgerond') }}
+                        </p>
+                    </div>
+                    <a href="{{ path('app_scan_result', {id: scan.id}) }}" class="text-[#1E6B3A] font-medium hover:underline">Bekijk resultaat</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

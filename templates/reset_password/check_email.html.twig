@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}E-mail verstuurd — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold text-[#1E6B3A] mb-8">Controleer je inbox</h1>
+
+    <div class="bg-white p-8 rounded-xl shadow-sm space-y-4 text-gray-700">
+        <p>Als er een account bestaat met dit e-mailadres, dan hebben we een link gestuurd om je wachtwoord opnieuw in te stellen.</p>
+        <p>Deze link is {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} geldig.</p>
+        <p>Heb je geen e-mail ontvangen? Kijk in je spammap of <a href="{{ path('app_forgot_password_request') }}" class="text-[#1E6B3A] font-medium hover:underline">probeer het opnieuw</a>.</p>
+    </div>
+</div>
+{% endblock %}
