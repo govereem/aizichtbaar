@@ -82,6 +82,40 @@ class DashboardControllerTest extends AppWebTestCase
         $this->assertResponseRedirects('/inloggen');
     }
 
+    public function testNewScanPageKeepsTheDashboardMenu(): void
+    {
+        $owner = $this->createUser('eigenaar@example.com', self::PASSWORD);
+
+        $this->client->loginUser($owner);
+        $crawler = $this->client->request('GET', '/dashboard/scans/new');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('nav[aria-label="Dashboard menu"]');
+        $this->assertSame('Nieuwe scan', trim($crawler->filter('a[aria-current="page"]')->text()));
+        $this->assertCount(1, $crawler->filter('form[action="/scan/free"] input[name="context"][value="dashboard"]'));
+    }
+
+    public function testNewScanPageOffersPaidScanOnlyWhenEnabled(): void
+    {
+        $owner = $this->createUser('eigenaar@example.com', self::PASSWORD);
+
+        $this->client->loginUser($owner);
+        $crawler = $this->client->request('GET', '/dashboard/scans/new');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSame(
+            (bool) static::getContainer()->getParameter('scan.paid_enabled'),
+            $crawler->filter('form[action="/scan/paid"]')->count() > 0,
+        );
+    }
+
+    public function testNewScanPageRequiresLogin(): void
+    {
+        $this->client->request('GET', '/dashboard/scans/new');
+
+        $this->assertResponseRedirects('/inloggen');
+    }
+
     public function testOwnerCanRescanFinishedScan(): void
     {
         $owner = $this->createUser('eigenaar@example.com', self::PASSWORD);

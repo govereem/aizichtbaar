@@ -1,0 +1,53 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block title %}Nieuwe scan — AIzichtbaar{% endblock %}
+
+{% block dashboard_content %}
+    <h1 class="text-3xl font-bold text-[#1E6B3A] mb-2">Nieuwe scan</h1>
+    <p class="text-gray-600 mb-8">Kies een scan. Het resultaat verschijnt daarna in je scans, zodat je het altijd terug kunt zien.</p>
+
+    <div class="grid gap-6 {{ scan_paid_enabled ? 'xl:grid-cols-2' : '' }}">
+        <div class="bg-white rounded-xl shadow-sm p-6 space-y-4">
+            <h2 class="text-xl font-bold">Gratis scan</h2>
+            <p class="text-sm text-gray-600">Een score op AI-zichtbaarheid van 0 tot 100, 7 controles en een actieplan.</p>
+            <form method="post" action="{{ path('app_scan_free') }}" class="space-y-4">
+                <input type="hidden" name="context" value="dashboard">
+                <div>
+                    <label for="free-website" class="block font-medium mb-1">Website URL</label>
+                    <input id="free-website" type="url" name="website" required placeholder="https://jouwwebsite.nl"
+                           class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]">
+                </div>
+                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Scan mijn website</button>
+            </form>
+        </div>
+
+        {% if scan_paid_enabled %}
+        <div class="bg-white rounded-xl shadow-sm border-2 border-[#1E6B3A] p-6 space-y-4">
+            <h2 class="text-xl font-bold">Uitgebreide scan <span class="text-[#1E6B3A]">€49</span></h2>
+            <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                <li>Alles van de gratis scan</li>
+                <li>AI-antwoordsimulatie: wordt je geciteerd?</li>
+                <li>Uitleg per stap en voorbeeldteksten</li>
+                <li>Vergelijking met maximaal 3 concurrenten</li>
+                <li>Rapport per e-mail</li>
+            </ul>
+            <form method="post" action="{{ path('app_scan_paid') }}" class="space-y-4">
+                <input type="hidden" name="context" value="dashboard">
+                <div>
+                    <label for="paid-website" class="block font-medium mb-1">Website URL</label>
+                    <input id="paid-website" type="url" name="website" required placeholder="https://jouwwebsite.nl"
+                           class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]">
+                </div>
+                <div>
+                    <label for="paid-competitors" class="block font-medium mb-1">Concurrenten (optioneel, max. 3)</label>
+                    <textarea id="paid-competitors" name="competitors" rows="3" placeholder="https://concurrent-een.nl&#10;https://concurrent-twee.nl"
+                              class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]"></textarea>
+                    <p class="text-xs text-gray-500 mt-1">Één website per regel.</p>
+                </div>
+                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Betaal €49 en start de scan</button>
+            </form>
+            <p class="text-xs text-center text-gray-500">Veilig betalen via Mollie. Door te betalen ga je akkoord met de <a href="{{ path('app_terms') }}" class="underline">algemene voorwaarden</a>.</p>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }} — Kennisbank AIzichtbaar{% endblock %}
+
+{% block description %}{{ article.description }}{% endblock %}
+
+{% block body %}
+<article class="max-w-3xl mx-auto px-4 py-12 space-y-8 text-gray-700">
+    <nav class="text-sm text-gray-500">
+        <a href="{{ path('app_kennisbank') }}" class="underline">Kennisbank</a> / {{ article.title }}
+    </nav>
+
+    <header class="space-y-3">
+        <h1 class="text-4xl font-bold text-[#1E6B3A]">{{ article.title }}</h1>
+        <p class="text-sm text-gray-500">Gepubliceerd op {{ article.publishedAt|date('d-m-Y') }}</p>
+    </header>
+
+    <div class="bg-white border-l-4 border-[#1E6B3A] rounded-lg shadow-sm p-6">
+        <h2 class="font-bold text-lg mb-2 text-gray-900">In het kort</h2>
+        <p>{{ article.summary }}</p>
+    </div>
+
+    <div class="space-y-6">
+        {% include 'kennisbank/articles/' ~ article.slug ~ '.html.twig' %}
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border p-6 text-center space-y-4">
+        <p class="text-lg font-semibold text-gray-900">Benieuwd hoe jouw website ervoor staat?</p>
+        <a href="{{ path('app_products') }}" class="inline-block btn-primary text-white px-8 py-4 rounded-lg font-semibold text-lg">Start gratis scan</a>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-bold mb-3 text-gray-900">Lees ook</h2>
+        <ul class="list-disc pl-6 space-y-1">
+            {% for other in articles %}
+            {% if other.slug != article.slug %}
+            <li><a href="{{ path('app_kennisbank_article', {slug: other.slug}) }}" class="underline text-[#1E6B3A]">{{ other.title }}</a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+
+<script type="application/ld+json">
+{{ {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    'headline': article.title,
+    'description': article.description,
+    'url': url('app_kennisbank_article', {slug: article.slug}),
+    'datePublished': article.publishedAt|date('Y-m-d'),
+    'dateModified': article.publishedAt|date('Y-m-d'),
+    'inLanguage': 'nl',
+    'author': {'@type': 'Organization', 'name': 'AIzichtbaar'},
+    'publisher': {'@type': 'Organization', 'name': 'AIzichtbaar'},
+}|json_encode|raw }}
+</script>
+{% endblock %}

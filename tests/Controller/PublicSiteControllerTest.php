@@ -77,6 +77,31 @@ class PublicSiteControllerTest extends AppWebTestCase
         $this->assertStringContainsString('Disallow: /scan/result/', (string) $this->client->getResponse()->getContent());
     }
 
+    public function testLlmsTxtIsPlainTextAndListsKeyPages(): void
+    {
+        $this->client->request('GET', '/llms.txt');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('Content-Type', 'text/plain; charset=UTF-8');
+        $this->assertStringStartsWith('# AIzichtbaar', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('(http://localhost/products)', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('(http://localhost/privacybeleid)', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('(http://localhost/veelgestelde-vragen)', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('(http://localhost/kennisbank/wat-is-ai-zichtbaarheid)', (string) $this->client->getResponse()->getContent());
+    }
+
+    public function testSitemapListsProductsPrivacyAndFaqPages(): void
+    {
+        $this->client->request('GET', '/sitemap.xml');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('<loc>http://localhost/products</loc>', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('<loc>http://localhost/privacybeleid</loc>', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('<loc>http://localhost/veelgestelde-vragen</loc>', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('<loc>http://localhost/kennisbank</loc>', (string) $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('<loc>http://localhost/kennisbank/llms-txt-en-robots-txt</loc>', (string) $this->client->getResponse()->getContent());
+    }
+
     public function testAdminCanRemoveASite(): void
     {
         $site = $this->createSite('zichtbaar.nl', PublicSite::STATUS_INDEXABLE);

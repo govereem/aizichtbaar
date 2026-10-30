@@ -109,6 +109,22 @@ class ScanControllerTest extends AppWebTestCase
         }
     }
 
+    public function testInvalidFreeScanFromDashboardReturnsToDashboardForm(): void
+    {
+        $this->client->loginUser($this->createUser('lid@example.com', 'Blauwe-Kaas-Fiets-2026!'));
+
+        $this->client->request('POST', '/scan/free', ['website' => 'geen-url', 'context' => 'dashboard']);
+
+        $this->assertResponseRedirects('/dashboard/scans/new');
+    }
+
+    public function testInvalidFreeScanFromPublicPageReturnsToPublicForm(): void
+    {
+        $this->client->request('POST', '/scan/free', ['website' => 'geen-url']);
+
+        $this->assertResponseRedirects('/scan/free');
+    }
+
     public function testAnonymousScanStaysPublic(): void
     {
         $this->client->request('POST', '/scan/free', ['website' => 'https://voorbeeld.nl']);

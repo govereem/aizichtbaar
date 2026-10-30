@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kennisbank — AIzichtbaar{% endblock %}
+
+{% block description %}Eenvoudige uitleg over AI-zichtbaarheid: wat het is, hoe AI-assistenten bronnen kiezen en hoe je je website klaarmaakt.{% endblock %}
+
+{% block body %}
+<section class="max-w-5xl mx-auto px-4 py-12 space-y-10">
+    <div class="text-center space-y-4">
+        <h1 class="text-4xl font-bold text-[#1E6B3A]">Kennisbank</h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Eenvoudige uitleg over AI-zichtbaarheid. Geen vakjargon, wel concrete stappen die je zelf kunt zetten.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        {% for article in articles %}
+        <a href="{{ path('app_kennisbank_article', {slug: article.slug}) }}" class="block bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
+            <h2 class="text-xl font-bold text-[#1E6B3A] mb-2">{{ article.title }}</h2>
+            <p class="text-gray-600 mb-4">{{ article.description }}</p>
+            <span class="font-semibold text-[#1E6B3A]">Lees meer →</span>
+        </a>
+        {% endfor %}
+    </div>
+
+    <div class="text-center">
+        <p class="text-gray-700 mb-4">Benieuwd hoe jouw website ervoor staat?</p>
+        <a href="{{ path('app_products') }}" class="inline-block btn-primary text-white px-8 py-4 rounded-lg font-semibold text-lg">Start gratis scan</a>
+    </div>
+</section>
+{% endblock %}

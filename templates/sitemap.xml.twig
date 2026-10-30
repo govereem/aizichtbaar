@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url><loc>{{ url('app_home') }}</loc></url>
-    <url><loc>{{ url('app_scan') }}</loc></url>
+    <url><loc>{{ url('app_products') }}</loc></url>
+    <url><loc>{{ url('app_products') }}</loc></url>
     <url><loc>{{ url('app_public_sites') }}</loc></url>
     <url><loc>{{ url('app_terms') }}</loc></url>
     <url><loc>{{ url('app_privacy') }}</loc></url>
     <url><loc>{{ url('app_contact') }}</loc></url>
+    <url><loc>{{ url('app_faq') }}</loc></url>
+    <url><loc>{{ url('app_kennisbank') }}</loc></url>
+    {% for article in articles %}
+    <url><loc>{{ url('app_kennisbank_article', {slug: article.slug}) }}</loc></url>
+    {% endfor %}
     {% for site in sites %}
     <url>
         <loc>{{ url('app_public_site_show', {slug: site.slug}) }}</loc>

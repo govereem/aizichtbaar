@@ -2,6 +2,8 @@
 
 {% block title %}AIzichtbaar — Word geciteerd door ChatGPT & AI{% endblock %}
 
+{% block description %}Stuur je URL en ontdek in een paar minuten hoe zichtbaar je website is voor ChatGPT, Perplexity en Google AI.{% endblock %}
+
 {% block body %}
 <section class="max-w-6xl mx-auto px-4 py-20 text-center">
     <h1 class="text-5xl font-bold mb-6 leading-tight">
@@ -11,7 +13,7 @@
     <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
         Geen technische kennis nodig. Stuur je URL, de AI doet de rest: analyse, citation-ready content en zichtbaarheid in ChatGPT, Perplexity en Google AI.
     </p>
-    <a href="{{ path('app_scan') }}" class="inline-block btn-primary text-white px-8 py-4 rounded-lg font-semibold text-lg">
+    <a href="{{ path('app_products') }}" class="inline-block btn-primary text-white px-8 py-4 rounded-lg font-semibold text-lg">
         Start gratis scan
     </a>
     <p class="text-sm text-gray-500 mt-4">Gratis check • Of uitgebreide scan voor €49</p>
@@ -34,6 +36,17 @@
             <h3 class="font-bold text-lg mb-2">Bijna te goed</h3>
             <p class="text-gray-600">Beter ranken én geciteerd worden door ChatGPT.</p>
         </div>
+    </div>
+</section>
+
+<section class="max-w-3xl mx-auto px-4 py-16 space-y-8">
+    <div>
+        <h2 class="text-2xl font-bold mb-3 text-[#1E6B3A]">Wat doet AIzichtbaar?</h2>
+        <p class="text-gray-700">AIzichtbaar controleert of AI-assistenten zoals ChatGPT, Perplexity en Google AI jouw website kunnen vinden en citeren. Je vult alleen je URL in. Daarna krijg je een score en een actieplan met de stappen die je zelf kunt zetten.</p>
+    </div>
+    <div>
+        <h2 class="text-2xl font-bold mb-3 text-[#1E6B3A]">Hoe werkt de gratis scan?</h2>
+        <p class="text-gray-700">De gratis scan controleert zeven signalen, zoals AI-crawlers, structured data en llms.txt. Het resultaat staat direct op een eigen pagina, samen met kant-en-klare bestanden die je kunt gebruiken. Een account is niet nodig.</p>
     </div>
 </section>
 {% endblock %}

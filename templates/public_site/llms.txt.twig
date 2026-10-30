@@ -1,0 +1,20 @@
+# AIzichtbaar
+
+> AIzichtbaar controleert of AI-assistenten zoals ChatGPT, Perplexity en Google AI een website kunnen vinden en citeren, en geeft een actieplan met concrete verbeteringen.
+
+## Belangrijke pagina's
+
+- [Homepage]({{ url('app_home') }}): Wat AIzichtbaar doet en hoe je de AI-zichtbaarheidscan start.
+- [Producten]({{ url('app_products') }}): De gratis en de uitgebreide AI-zichtbaarheidscan, met wat je per pakket krijgt.
+- [Gescande websites]({{ url('app_public_sites') }}): Websites die met de gratis scan zijn gecontroleerd, met hun score en een korte samenvatting.
+- [Contact]({{ url('app_contact') }}): Contactgegevens en het contactformulier.
+- [Veelgestelde vragen]({{ url('app_faq') }}): Antwoorden op de vragen over de scan, prijzen, betalen en gegevens.
+- [Algemene voorwaarden]({{ url('app_terms') }}): Voorwaarden voor de scans.
+- [Privacybeleid]({{ url('app_privacy') }}): Welke persoonsgegevens we verwerken en welke rechten je hebt.
+
+## Kennisbank
+
+- [Kennisbank]({{ url('app_kennisbank') }}): Eenvoudige uitleg over AI-zichtbaarheid.
+{% for article in articles %}
+- [{{ article.title }}]({{ url('app_kennisbank_article', {slug: article.slug}) }}): {{ article.description }}
+{% endfor %}

@@ -1,0 +1,47 @@
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Wat is robots.txt?</h2>
+    <p>robots.txt is een tekstbestand op <code>jouwsite.nl/robots.txt</code>. Het geeft bots van zoekmachines en AI-diensten regels: welke pagina's ze wel en niet mogen bezoeken. Nette bots houden zich daaraan. Het is geen beveiliging. Pagina's die privé moeten blijven, beveilig je met een login.</p>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">AI-crawlers toegang geven</h2>
+    <p>Veel AI-diensten hebben hun eigen bot. Bekende namen zijn GPTBot (OpenAI), ClaudeBot (Anthropic), PerplexityBot (Perplexity) en Google-Extended. Let op: Google-Extended bepaalt of je content mag worden gebruikt voor Google's AI-modellen. Het heeft geen invloed op gewone zoekresultaten in Google.</p>
+    <p class="mt-2">Een robots.txt die alle bots toegang geeft en naar je sitemap verwijst, ziet er zo uit:</p>
+    <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code>User-agent: *
+Allow: /
+
+Sitemap: https://www.jouwsite.nl/sitemap.xml</code></pre>
+    <p class="mt-2">Wil je één bot weren, dan zet je die in een eigen blok met <code>Disallow: /</code>. Controleer dit goed: een per ongeluk geblokkeerde bot kan je site niet lezen.</p>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Wat is llms.txt?</h2>
+    <p>llms.txt is een kort tekstbestand op <code>jouwsite.nl/llms.txt</code>. Het is een voorstel en geen officiële standaard die alle AI-diensten volgen. Het bestand beschrijft in gewone taal wat je bedrijf doet en geeft links naar je belangrijkste pagina's, zoals diensten, prijzen en contact. Het kost weinig moeite en helpt AI-systemen je site snel te begrijpen.</p>
+    <p class="mt-2">Een eenvoudig voorbeeld:</p>
+    <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code># Jouw bedrijf
+
+&gt; Eén zin over wat je doet en voor wie.
+
+## Belangrijke pagina's
+
+- [Diensten](https://www.jouwsite.nl/diensten): Wat we aanbieden.
+- [Contact](https://www.jouwsite.nl/contact): Adres en e-mail.</code></pre>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Zo controleer je of het werkt</h2>
+    <ol class="list-decimal pl-6 space-y-1">
+        <li>Open <code>jouwsite.nl/robots.txt</code> in je browser. Staat je sitemap erin en zie je geen <code>Disallow: /</code> bij een AI-bot?</li>
+        <li>Open <code>jouwsite.nl/llms.txt</code>. Zie je je tekst en je links?</li>
+        <li>Gebruik de gratis AIzichtbaar-scan. Die controleert ook of AI-crawlers je site mogen bezoeken.</li>
+    </ol>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Direct aan de slag</h2>
+    <ul class="list-disc pl-6 space-y-1">
+        <li>Controleer je robots.txt op blokkades voor AI-bots.</li>
+        <li>Maak een llms.txt met je vijf belangrijkste pagina's.</li>
+        <li>Zet de link naar je sitemap in je robots.txt.</li>
+    </ul>
+</div>

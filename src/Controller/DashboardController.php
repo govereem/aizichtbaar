@@ -38,4 +38,10 @@ class DashboardController extends AbstractController
             'view' => $view,
         ]);
     }
+
+    #[Route('/dashboard/scans/new', name: 'app_dashboard_scan_new')]
+    public function newScan(): Response
+    {
+        return $this->render('dashboard/scan_new.html.twig');
+    }
 }

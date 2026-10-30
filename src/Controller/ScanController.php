@@ -26,12 +26,6 @@ class ScanController extends AbstractController
 {
     private const int MAX_COMPETITORS = 3;
 
-    #[Route('/scan', name: 'app_scan')]
-    public function index(): Response
-    {
-        return $this->render('scan/index.html.twig');
-    }
-
     #[Route('/scan/free', name: 'app_scan_free', methods: ['GET', 'POST'])]
     public function free(Request $request, EntityManagerInterface $em, MessageBusInterface $bus, ValidatorInterface $validator, #[Autowire(service: 'limiter.anonymous_free_scan')] RateLimiterFactory $anonymousLimiter, #[CurrentUser] ?User $user = null): Response
     {
@@ -42,7 +36,7 @@ class ScanController extends AbstractController
             if (count($violations) > 0) {
                 $this->addFlash('error', $violations[0]->getMessage());
 
-                return $this->redirectToRoute('app_scan_free');
+                return $this->redirectToRoute($this->scanFormRoute($request, 'app_scan_free'));
             }
 
             // Only anonymous visitors are limited. Their scans are the ones that can be published, so they are capped per IP.
@@ -77,7 +71,7 @@ class ScanController extends AbstractController
     public function paid(Request $request, EntityManagerInterface $em, MollieService $mollie, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator, #[CurrentUser] ?User $user = null): Response
     {
         if (!$this->getParameter('scan.paid_enabled')) {
-            return $this->redirectToRoute('app_scan');
+            return $this->redirectToRoute('app_products');
         }
 
         if ($request->isMethod('POST')) {
@@ -95,7 +89,7 @@ class ScanController extends AbstractController
             if ([] !== $violations) {
                 $this->addFlash('error', $violations[0]->getMessage());
 
-                return $this->redirectToRoute('app_scan_paid');
+                return $this->redirectToRoute($this->scanFormRoute($request, 'app_scan_paid'));
             }
 
             $scan = new Scan();
@@ -187,6 +181,14 @@ class ScanController extends AbstractController
         }
 
         return new Response('OK');
+    }
+
+    /**
+     * Forms in the dashboard post context=dashboard, so validation errors stay in the side menu layout.
+     */
+    private function scanFormRoute(Request $request, string $publicRoute): string
+    {
+        return 'dashboard' === $request->request->get('context') ? 'app_dashboard_scan_new' : $publicRoute;
     }
 
     /**

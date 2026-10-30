@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\PublicSite;
+use App\Kennisbank\KnowledgeBase;
 use App\Repository\PublicSiteRepository;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,12 +44,22 @@ class PublicSiteController extends AbstractController
     }
 
     #[Route('/sitemap.xml', name: 'app_sitemap')]
-    public function sitemap(PublicSiteRepository $sites): Response
+    public function sitemap(PublicSiteRepository $sites, KnowledgeBase $knowledgeBase): Response
     {
         $response = $this->render('sitemap.xml.twig', [
             'sites' => $sites->findBy(['status' => PublicSite::STATUS_INDEXABLE], ['domain' => 'ASC']),
+            'articles' => $knowledgeBase->all(),
         ]);
         $response->headers->set('Content-Type', 'application/xml; charset=UTF-8');
+
+        return $response;
+    }
+
+    #[Route('/llms.txt', name: 'app_llms')]
+    public function llms(KnowledgeBase $knowledgeBase): Response
+    {
+        $response = $this->render('public_site/llms.txt.twig', ['articles' => $knowledgeBase->all()]);
+        $response->headers->set('Content-Type', 'text/plain; charset=UTF-8');
 
         return $response;
     }

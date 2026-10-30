@@ -4,7 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AIzichtbaar{% endblock %}</title>
-    {% block meta %}{% endblock %}
+    {% block meta %}
+    <meta name="description" content="{% block description %}AIzichtbaar controleert of AI-assistenten zoals ChatGPT, Perplexity en Google AI jouw website kunnen vinden en citeren.{% endblock %}">
+    <link rel="canonical" href="{{ absolute_url(app.request.pathInfo) }}">
+    <meta property="og:site_name" content="AIzichtbaar">
+    <meta property="og:title" content="{{ block('title') }}">
+    <meta property="og:description" content="{{ block('description') }}">
+    {% endblock %}
+    <script type="application/ld+json">
+    {{ {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        'name': 'AIzichtbaar',
+        'url': url('app_home'),
+        'logo': absolute_url('/images/logo.svg'),
+        'description': 'AI-zichtbaarheidscan: controleert of ChatGPT, Perplexity en Google AI je website kunnen vinden en citeren.',
+        'email': 'support@aizichtbaar.nl',
+        'address': {
+            '@type': 'PostalAddress',
+            'streetAddress': 'Gerben Colmjonwei 109',
+            'postalCode': '8915 GJ',
+            'addressLocality': 'Leeuwarden',
+            'addressCountry': 'NL',
+        },
+        'identifier': {'@type': 'PropertyValue', 'propertyID': 'KvK', 'value': '82005222'},
+    }|json_encode|raw }}
+    </script>
+    <script type="application/ld+json">
+    {{ {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        'name': 'AIzichtbaar',
+        'url': url('app_home'),
+        'inLanguage': 'nl',
+    }|json_encode|raw }}
+    </script>
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -58,7 +92,7 @@
 
     <footer class="bg-[#1E6B3A] text-white py-8 text-center mt-16">
         <p>© {{ "now"|date("Y") }} AIzichtbaar — Maak je zichtbaar in AI.</p>
-        <p class="mt-2 text-sm"><a href="{{ path('app_public_sites') }}" class="underline">Gescande websites</a> · <a href="{{ path('app_terms') }}" class="underline">Algemene voorwaarden</a> · <a href="{{ path('app_privacy') }}" class="underline">Privacybeleid</a> · <a href="{{ path('app_contact') }}" class="underline">Contact</a></p>
+        <p class="mt-2 text-sm"><a href="{{ path('app_public_sites') }}" class="underline">Gescande websites</a> · <a href="{{ path('app_faq') }}" class="underline">Veelgestelde vragen</a> · <a href="{{ path('app_kennisbank') }}" class="underline">Kennisbank</a> · <a href="{{ path('app_terms') }}" class="underline">Algemene voorwaarden</a> · <a href="{{ path('app_privacy') }}" class="underline">Privacybeleid</a> · <a href="{{ path('app_contact') }}" class="underline">Contact</a></p>
     </footer>
 </body>
 </html>

@@ -1,0 +1,47 @@
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Wat is structured data?</h2>
+    <p>Een gewone webpagina is gemaakt voor mensen. Structured data is een tweede laag, voor machines: "Dit is een bedrijf, dit is het adres, dit is het telefoonnummer." Zoekmachines en AI kunnen je gegevens daardoor sneller en zekerder lezen. Bezoekers zien er niets van.</p>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Wat is JSON-LD?</h2>
+    <p>JSON-LD is de meest gebruikte manier om structured data toe te voegen. Het is een stukje tekst op je pagina, opgebouwd volgens de vaste begrippen van schema.org. Zo ziet een eenvoudig voorbeeld voor een bedrijf eruit:</p>
+    <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Jouw bedrijf",
+  "url": "https://www.jouwsite.nl",
+  "email": "info@jouwsite.nl"
+}
+&lt;/script&gt;</code></pre>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Welke soorten gebruik je het vaakst?</h2>
+    <ul class="list-disc pl-6 space-y-1">
+        <li><strong>Organization:</strong> de gegevens van je bedrijf, zoals naam, adres en KvK-nummer.</li>
+        <li><strong>FAQPage:</strong> de vragen en antwoorden van een veelgestelde-vragenpagina.</li>
+        <li><strong>Article:</strong> een artikel of kennispagina, met titel en datum.</li>
+        <li><strong>Product</strong> of <strong>Service:</strong> wat je verkoopt of aanbiedt.</li>
+    </ul>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Wat het wel en niet doet</h2>
+    <p>Structured data helpt zoekmachines en AI je pagina beter te begrijpen. Het is geen garantie op een betere positie of op extra weergaven in Google. Google toont FAQ-resultaten bijvoorbeeld alleen nog beperkt. Zie structured data daarom als stevige basis, niet als snelle truc.</p>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Hoe controleer je het?</h2>
+    <p>Plak je webadres of je code in de Rich Results Test van Google of in de Schema Markup Validator (validator.schema.org). Die laten zien of de opmaak klopt en welke fouten er zijn.</p>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold mb-2 text-gray-900">Direct aan de slag</h2>
+    <ul class="list-disc pl-6 space-y-1">
+        <li>Voeg de gegevens van je bedrijf toe als Organization op je homepage.</li>
+        <li>Gebruik Article op je kennispagina's en FAQPage op je veelgestelde-vragenpagina.</li>
+        <li>Controleer de code met een validator en los de fouten op.</li>
+    </ul>
+</div>
