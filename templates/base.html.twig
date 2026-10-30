@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AIzichtbaar{% endblock %}</title>
+    {% block meta %}{% endblock %}
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,7 +21,8 @@
                 <span class="text-xl font-bold text-[#1E6B3A]">AIzichtbaar</span>
             </a>
             <nav class="space-x-6">
-                <a href="{{ path('app_scan') }}" class="text-[#1E6B3A] font-medium">Scans</a>
+                <a href="{{ path('app_products') }}" class="text-[#1E6B3A] font-medium">Producten</a>
+                <a href="{{ path('app_public_sites') }}" class="text-[#1E6B3A] font-medium">Websites</a>
                 {% if app.user %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('app_admin_users') }}" class="text-gray-600">Beheer</a>
@@ -56,6 +58,7 @@
 
     <footer class="bg-[#1E6B3A] text-white py-8 text-center mt-16">
         <p>© {{ "now"|date("Y") }} AIzichtbaar — Maak je zichtbaar in AI.</p>
+        <p class="mt-2 text-sm"><a href="{{ path('app_public_sites') }}" class="underline">Gescande websites</a> · <a href="{{ path('app_terms') }}" class="underline">Algemene voorwaarden</a> · <a href="{{ path('app_privacy') }}" class="underline">Privacybeleid</a> · <a href="{{ path('app_contact') }}" class="underline">Contact</a></p>
     </footer>
 </body>
 </html>

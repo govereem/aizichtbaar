@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gescande websites — AIzichtbaar{% endblock %}
+
+{% block meta %}
+    {% if page > 1 %}<meta name="robots" content="noindex,follow">{% endif %}
+    <link rel="canonical" href="{{ url('app_public_sites', page > 1 ? {page: page} : {}) }}">
+{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-2 text-[#1E6B3A]">Gescande websites</h1>
+    <p class="text-gray-600 mb-8">Websites die met de gratis AI-zichtbaarheidscan zijn gescand, met hun score en een korte samenvatting. De samenvattingen zijn door AI gemaakt op basis van de homepage.</p>
+
+    {% if sites|length == 0 %}
+        <p class="text-gray-600">Er staan nog geen websites in de lijst.</p>
+    {% endif %}
+
+    <div class="grid md:grid-cols-2 gap-4">
+        {% for site in sites %}
+            <a href="{{ path('app_public_site_show', {slug: site.slug}) }}" class="block bg-white border rounded-xl p-5 hover:shadow-md">
+                <div class="flex justify-between items-start gap-4">
+                    <div class="font-semibold">{{ site.name }}</div>
+                    <span class="text-sm font-bold text-[#1E6B3A] whitespace-nowrap">{{ site.score }} / 100</span>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">{{ site.domain }}{% if site.niche %} · {{ site.niche }}{% endif %}</div>
+                {% if site.summary %}
+                    <p class="text-sm text-gray-700 mt-2">{{ site.summary|slice(0, 160) }}{% if site.summary|length > 160 %}…{% endif %}</p>
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if pages > 1 %}
+        <nav class="flex justify-between items-center mt-8 text-sm">
+            {% if page > 1 %}
+                <a href="{{ path('app_public_sites', page - 1 > 1 ? {page: page - 1} : {}) }}" class="text-[#1E6B3A] font-medium">← Vorige</a>
+            {% else %}
+                <span></span>
+            {% endif %}
+            <span class="text-gray-500">Pagina {{ page }} van {{ pages }}</span>
+            {% if page < pages %}
+                <a href="{{ path('app_public_sites', {page: page + 1}) }}" class="text-[#1E6B3A] font-medium">Volgende →</a>
+            {% else %}
+                <span></span>
+            {% endif %}
+        </nav>
+    {% endif %}
+
+    <div class="mt-12 p-6 bg-white border rounded-xl text-center">
+        <p class="mb-4 text-gray-700">Staat jouw website er nog niet tussen? Doe de gratis scan.</p>
+        <a href="{{ path('app_scan_free') }}" class="inline-block btn-primary text-white px-6 py-3 rounded-lg font-semibold">Start gratis scan</a>
+    </div>
+</div>
+{% endblock %}

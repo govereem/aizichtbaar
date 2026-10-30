@@ -1,13 +1,14 @@
-{% extends 'base.html.twig' %}
+{% extends 'dashboard/layout.html.twig' %}
 
 {% block title %}Dashboard — AIzichtbaar{% endblock %}
 
-{% block body %}
-<div class="max-w-4xl mx-auto px-4 py-16">
+{% block dashboard_content %}
     <div class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold text-[#1E6B3A]">Mijn scans</h1>
+        <h1 class="text-3xl font-bold text-[#1E6B3A]">Dashboard</h1>
         <a href="{{ path('app_scan') }}" class="btn-primary text-white px-4 py-2 rounded-lg font-semibold">Nieuwe scan</a>
     </div>
+
+    <h2 class="text-lg font-semibold mb-4">Recente scans</h2>
 
     {% if scans is empty %}
         <div class="bg-white p-8 rounded-xl shadow-sm text-center text-gray-600">
@@ -16,18 +17,26 @@
     {% else %}
         <ul class="space-y-4">
             {% for scan in scans %}
-                <li class="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="font-semibold">{{ scan.websiteUrl }}</p>
+                <li class="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between gap-4">
+                    <div class="min-w-0">
+                        <p class="font-semibold truncate">{{ scan.websiteUrl }}</p>
                         <p class="text-sm text-gray-500">
                             {{ scan.createdAt|date('d-m-Y H:i') }} · {{ scan.type == 'paid' ? 'Uitgebreide scan' : 'Gratis scan' }} ·
-                            {{ scan.status == 'pending' ? 'In afwachting van betaling' : (scan.status == 'paid' ? 'Betaald' : 'Afgerond') }}
+                            {% include 'dashboard/_status.html.twig' with {status: scan.status} only %}
                         </p>
                     </div>
-                    <a href="{{ path('app_scan_result', {id: scan.id}) }}" class="text-[#1E6B3A] font-medium hover:underline">Bekijk resultaat</a>
+                    <div class="flex items-center gap-4 shrink-0">
+                        {% include 'dashboard/_rescan_form.html.twig' %}
+                        <a href="{{ path('app_scan_result', {publicId: scan.publicId}) }}" class="text-[#1E6B3A] font-medium hover:underline">Bekijk resultaat</a>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
+
+        {% if scans|length >= 5 %}
+            <div class="mt-6 text-right">
+                <a href="{{ path('app_dashboard_scans') }}" class="text-[#1E6B3A] font-medium hover:underline">Alle scans bekijken →</a>
+            </div>
+        {% endif %}
     {% endif %}
-</div>
 {% endblock %}

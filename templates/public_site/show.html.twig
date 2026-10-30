@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ site.name }} — AI-zichtbaarheid | AIzichtbaar{% endblock %}
+
+{% block meta %}
+    <meta name="description" content="{{ (site.summary ?? 'AI-zichtbaarheidscan van ' ~ site.domain)|slice(0, 155) }}">
+    <meta name="robots" content="{{ site.status == 'indexable' ? 'index,follow' : 'noindex,follow' }}">
+    <link rel="canonical" href="{{ url('app_public_site_show', {slug: site.slug}) }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ site.name }} — AI-zichtbaarheid">
+    <meta property="og:description" content="{{ (site.summary ?? 'AI-zichtbaarheidscan van ' ~ site.domain)|slice(0, 155) }}">
+    <meta property="og:url" content="{{ url('app_public_site_show', {slug: site.slug}) }}">
+    <meta property="og:site_name" content="AIzichtbaar">
+    <script type="application/ld+json">
+    {{ {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        'url': url('app_public_site_show', {slug: site.slug}),
+        'about': {'@type': 'WebSite', 'url': 'https://' ~ site.domain, 'name': site.name}
+    }|json_encode(constant('JSON_HEX_TAG'))|raw }}
+    </script>
+{% endblock %}
+
+{% block body %}
+<div class="max-w-3xl mx-auto px-4 py-12">
+    <div class="mb-6">
+        <a href="{{ path('app_public_sites') }}" class="text-[#1E6B3A] text-sm font-medium">← Terug naar alle websites</a>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border p-8 mb-8">
+        <div class="flex items-center justify-between gap-4 mb-2">
+            <h1 class="text-2xl font-bold">{{ site.name }}</h1>
+            {% if site.niche %}
+                <span class="text-xs bg-green-100 text-[#1E6B3A] px-2 py-1 rounded-full whitespace-nowrap">{{ site.niche }}</span>
+            {% endif %}
+        </div>
+        <p class="text-sm mb-6">
+            <a href="https://{{ site.domain }}" rel="nofollow ugc noopener" target="_blank" class="text-gray-500 underline">{{ site.domain }}</a>
+        </p>
+
+        <div class="flex items-center gap-8">
+            <div class="text-center">
+                <div class="text-6xl font-bold text-[#1E6B3A]">{{ site.score }}</div>
+                <div class="text-gray-500 text-sm">/ 100</div>
+            </div>
+            <div>
+                {% if site.summary %}
+                    <p class="font-medium">{{ site.summary }}</p>
+                {% else %}
+                    <p class="text-gray-600">Er is nog geen samenvatting beschikbaar voor deze website.</p>
+                {% endif %}
+                <p class="text-xs text-gray-500 mt-2">Samenvatting door AI op basis van de homepage. Gescand op {{ site.scannedAt|date('d-m-Y') }}.</p>
+            </div>
+        </div>
+    </div>
+
+    {% if site.checks %}
+        <h2 class="text-xl font-bold mb-3">Controles</h2>
+        <div class="space-y-2 mb-8">
+            {% for check in site.checks %}
+                <div class="bg-white border rounded-xl p-4 flex gap-3 items-center">
+                    <span class="text-xl">{% if check.status == 'ok' %}✅{% elseif check.status == 'warning' %}⚠️{% else %}❌{% endif %}</span>
+                    <span class="font-semibold">{{ check.title }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
+        <h3 class="font-bold text-lg mb-2">Hoe zichtbaar is jouw website voor AI?</h3>
+        <p class="text-gray-600 mb-4 text-sm">Doe de gratis scan en krijg een score, een actieplan en kant-en-klare bestanden.</p>
+        <a href="{{ path('app_scan_free') }}" class="inline-block btn-primary text-white px-6 py-3 rounded-lg font-semibold">Start gratis scan</a>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-8">
+        Klopt er iets niet, of wil je dat deze pagina verdwijnt? Mail naar <a href="mailto:{{ scan_contact_email }}" class="underline">{{ scan_contact_email }}</a>.
+    </p>
+</div>
+{% endblock %}

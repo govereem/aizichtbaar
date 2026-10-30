@@ -3,27 +3,85 @@
 {% block title %}Gratis AI Scan — AIzichtbaar{% endblock %}
 
 {% block body %}
+{% set example_llms %}
+# Voorbeeld BV
+
+> Installatiebedrijf in Utrecht voor woningen en kantoren: airco's, warmtepompen en onderhoud.
+
+## Belangrijke pagina's
+
+- [Diensten](https://voorbeeld.nl/diensten): airco's, warmtepompen en onderhoud.
+- [Over ons](https://voorbeeld.nl/over-ons): ons team en onze werkwijze.
+{% endset %}
+{% set example_jsonld %}
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Voorbeeld BV",
+    "url": "https://voorbeeld.nl",
+    "description": "Installatiebedrijf in Utrecht voor woningen en kantoren.",
+    "sameAs": ["https://www.linkedin.com/company/voorbeeld-bv"]
+}
+{% endset %}
+{% set example_robots %}
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+{% endset %}
+
 <div class="max-w-xl mx-auto px-4 py-16">
     <h1 class="text-3xl font-bold mb-4">Gratis AI Zichtbaarheid Scan</h1>
     <p class="text-gray-600 mb-8">
-        Ontdek in een paar minuten of AI-systemen jouw website kunnen vinden en citeren. 
-        Je krijgt een score en 3 concrete verbeterpunten.
+        Ontdek in een paar minuten of AI-systemen jouw website kunnen vinden en citeren.
+        Je krijgt een score, een actieplan en kant-en-klare bestanden voor je website.
     </p>
+
+    {% if limit_reached ?? false %}
+        <div class="mb-8 p-4 bg-red-50 text-red-800 rounded-lg text-sm" role="alert">
+            Je hebt de gratis scans van vandaag op. Probeer het opnieuw na {{ retry_after|date('d-m-Y H:i') }}.
+            Met een gratis account scan je zonder dit maximum. <a href="{{ path('app_register') }}" class="underline font-semibold">Maak een account aan</a>.
+        </div>
+    {% endif %}
 
     <form method="post" class="space-y-4">
         <div>
             <label class="block font-medium mb-1">Website URL</label>
             <input type="url" name="website" required placeholder="https://jouwwebsite.nl"
                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]">
+            <p class="text-xs text-gray-500 mt-1">Vul de URL van je homepage in.</p>
         </div>
         <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
-            Start gratis scan
+            Scan mijn website
         </button>
     </form>
 
     <div class="mt-10 p-4 bg-green-50 rounded-lg text-sm">
-        <strong>Wat krijg je?</strong><br>
-        Een snelle check op AI-crawlers, contentstructuur en basis entity-signalen. Perfect om te zien of je al op de goede weg bent.
+        <strong>Wat krijg je?</strong>
+        <ul class="list-disc ml-5 mt-2 space-y-1">
+            <li>Een score op AI-zichtbaarheid van 0 tot 100</li>
+            <li>7 controles: AI-crawlers, structured data, llms.txt, sitemap, leesbaarheid zonder JavaScript, contentstructuur en entiteit &amp; merk</li>
+            <li>Een actieplan met wat slim is om aan te passen</li>
+            <li>Kant-en-klare llms.txt, Organization-markup (JSON-LD) en robots.txt</li>
+        </ul>
     </div>
+
+    <details class="mt-6 bg-white border rounded-xl p-4">
+        <summary class="font-semibold cursor-pointer">Zo zien de kant-en-klare bestanden eruit</summary>
+        <div class="mt-4">
+            {% include 'scan/_ready_files.html.twig' with {
+                files: {llms_txt: example_llms|trim, organization_json_ld: example_jsonld|trim, robots_snippet: example_robots|trim},
+                example: true,
+                homepage_only: false
+            } %}
+        </div>
+    </details>
 </div>
 {% endblock %}

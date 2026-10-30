@@ -1,0 +1,6 @@
+{% if scan.status in ['completed', 'failed'] %}
+    <form method="post" action="{{ path('app_scan_rescan', {publicId: scan.publicId}) }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('rescan-' ~ scan.publicId) }}">
+        <button type="submit" class="text-[#1E6B3A] font-medium hover:underline">Opnieuw scannen</button>
+    </form>
+{% endif %}

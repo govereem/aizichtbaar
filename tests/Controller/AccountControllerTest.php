@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use App\Tests\AppWebTestCase;
@@ -54,6 +56,6 @@ class AccountControllerTest extends AppWebTestCase
 
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Mijn scans');
+        $this->assertSelectorTextContains('h1', 'Dashboard');
     }
 }

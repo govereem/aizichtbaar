@@ -8,8 +8,33 @@ framework:
     #esi: true
     #fragments: true
 
+    # Anonymous free scans: 3 per IP per day. Logged-in users are not limited.
+    rate_limiter:
+        anonymous_free_scan:
+            policy: sliding_window
+            limit: 3
+            interval: '1 day'
+
+        # Contact form: 5 messages per IP per hour, against spam.
+        contact_form:
+            policy: sliding_window
+            limit: 5
+            interval: '1 hour'
+
 when@test:
     framework:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+        cache:
+            pools:
+                # Rate limit counts must not survive between tests, so they live in memory.
+                cache.anonymous_free_scan:
+                    adapter: cache.adapter.array
+                cache.contact_form:
+                    adapter: cache.adapter.array
+        rate_limiter:
+            anonymous_free_scan:
+                cache_pool: 'cache.anonymous_free_scan'
+            contact_form:
+                cache_pool: 'cache.contact_form'

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use App\Entity\Scan;
@@ -36,7 +38,8 @@ class AdminControllerTest extends AppWebTestCase
 
         $scan = $this->entityManager()->getRepository(Scan::class)->findOneBy(['user' => $owner]);
         $this->assertSame('paid', $scan->getType());
-        $this->assertSame('paid', $scan->getStatus());
+        // The scan is dispatched and runs inline in the test env, so it ends up completed.
+        $this->assertSame('completed', $scan->getStatus());
         $this->assertNull($scan->getMolliePaymentId());
         $this->assertArrayHasKey('actions', $scan->getResults());
 

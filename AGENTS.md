@@ -1,106 +1,63 @@
 # AGENTS.md
 
-This is a Symfony project. Check `composer.json` for the exact Symfony/PHP version
-in use, and read `symfony.lock` to see which recipes ran. Don't assume Doctrine,
-Twig, API Platform, Messenger, or Lock are installed unless one of those says so.
+Symfony 8.x on PHP 8.4+. Check `composer.json` and `symfony.lock` for what is installed; don't assume Doctrine, Twig, API Platform, Messenger, or Lock.
 
-## Ask before generating
+## Ask first
 
-If the task doesn't specify, ask rather than guess:
+If the task doesn't specify, ask: persistence (Doctrine ORM, ODM, or none), interface (Twig, API, or both), auth (SecurityBundle and which authenticator). If you can't ask, state the assumption and pick the smallest option.
 
-- Persistence: Doctrine ORM, Doctrine ODM, or none?
-- Interface: server-rendered (Twig), API (Serializer, maybe API Platform), or both?
-- Auth: SecurityBundle, and which authenticator?
+## Adding features
 
-If you can't ask (no interactive channel), state the assumption you're making and
-pick the smallest option (e.g. no persistence layer) rather than scaffolding a
-full stack nobody asked for.
-
-## Adding features: Flex, not hand-wiring
-
-Install new capabilities with `composer require <package>` (e.g. `symfony/lock`,
-`symfony/messenger`, `orm-pack`) and let the Flex recipe register the bundle and
-generate its config. Don't hand-edit `config/bundles.php` or hand-write a bundle's
-base config; that's what the recipe is for. Don't skip a good-fit component just
-because it isn't installed yet; installing it is one command.
+Use `composer require <package>` and let the Flex recipe wire it. Don't hand-edit `config/bundles.php` or hand-write base bundle config. Don't skip a good-fit component because it isn't installed yet.
 
 ## Conventions
 
-Follow https://symfony.com/doc/current/best_practices.html to write idiomatic
-Symfony:
-
-- Use PHP attributes for framework metadata, and not only on controllers:
-  `#[Route]`, `#[MapRequestPayload]`, `#[IsGranted]` on actions, `#[Assert\...]`
-  on properties, `#[AsCommand]`, `#[AsEventListener]`, `#[AsMessageHandler]`, and
-  `#[AsAlias]` / `#[AsTaggedItem]` / `#[Autoconfigure]` on services. No YAML or
-  XML routing.
-- Rely on autowiring and autoconfiguration. Type-hint constructor arguments and
-  let the container resolve them. Where a type-hint can't express it, stay in the
-  class with `#[Autowire]` (parameters, env vars, expressions) or `#[Target]` (one
-  of several implementations of an interface). A YAML service definition is the
-  last resort, not the first.
-- Controllers extend `AbstractController`, stay thin, and delegate to services.
-- Use the framework for what it already does: Form for server-rendered forms,
-  Validator for validation, Serializer for JSON, Messenger for async work,
-  Security (voters, authenticators) for access control, Twig `path()`/`url()`
-  instead of hardcoded URLs.
-- Before hand-writing infrastructure (locks, queues, caches, HTTP clients,
-  mailers, schedulers) or reaching for a third-party library, check whether a
-  Symfony component covers it. It usually does.
-
-Three specifics worth spelling out, because they are easy to get wrong:
-
-- Bind request data with `#[MapRequestPayload]` / `#[MapQueryString]` on action
-  arguments, which wires up Serializer and Validator for you, instead of calling
-  `json_decode()` or `SerializerInterface` by hand. If neither package is
-  installed yet, `composer require` them rather than falling back to manual
-  parsing.
-- Use constructor property promotion, and `readonly` for DTOs and value objects.
-- Use `symfony/lock` (`LockFactory`) for mutual exclusion. A hand-built flag or
-  lock file looks fine in review and is usually wrong under concurrency.
-
-## Everyday workflow
-
-- Run the app with `symfony serve -d`, and commands with `symfony console ...`
-  (or `bin/console` when the Symfony CLI isn't available).
-- When something fails, read `var/log/dev.log` and the web profiler
-  (`/_profiler`) before changing code.
-- If `maker-bundle` is installed, prefer `bin/console make:*` with every argument
-  passed up front and `--no-interaction` where supported: makers prompt on a
-  terminal by default, which hangs a non-interactive shell. If a maker still
-  needs interactive input, hand-write the code instead.
-- If Doctrine ORM is installed, schema changes go through migrations
-  (`bin/console make:migration`, then `doctrine:migrations:migrate`), never
-  `doctrine:schema:update` or hand-written SQL.
-- `.env` is committed and holds defaults only. Real secrets belong in `.env.local`
-  (git-ignored) or the secrets vault (`bin/console secrets:set`), read via
-  `%env(...)%`.
-
-## Testing
-
-Install `symfony/test-pack` if it isn't already. Functional/HTTP tests extend
-`WebTestCase`; service-level tests extend `KernelTestCase`. Run
-`php bin/phpunit` (falls back to `vendor/bin/phpunit`). A feature isn't done
-until it has a test that exercises it the way a caller would, an HTTP request for
-a controller or a service call for a service, not just "it didn't throw."
+- Follow https://symfony.com/doc/current/best_practices.html.
+- Use PHP attributes, not YAML/XML: `#[Route]`, `#[MapRequestPayload]`, `#[MapQueryString]`, `#[IsGranted]`, `#[Assert\...]`, `#[AsCommand]`, `#[AsEventListener]`, `#[AsEntityListener]`, `#[AsMessageHandler]`, `#[AsAlias]`, `#[AsTaggedItem]`, `#[Autoconfigure]`.
+- Constructor injection and autowiring only. Never call the container inside a service. Use `#[Autowire]` (parameters, env vars, expressions) or `#[Target]` when a type-hint isn't enough. YAML service definitions are a last resort.
+- Controllers extend `AbstractController`, stay thin, and delegate to services or Messenger handlers. Use Messenger + a handler for complex or async work.
+- Bind request data with `#[MapRequestPayload]` / `#[MapQueryString]`, not `json_decode()` or manual parsing. If Serializer or Validator isn't installed, `composer require` it.
+- Use the framework first: Form, Validator, Serializer, Security voters, Twig `path()`/`url()`. Check for a Symfony component before hand-writing caches, queues, locks, HTTP clients, mailers, or schedulers.
+- For mutual exclusion, use `symfony/lock` (`LockFactory`), never a hand-built flag or lock file.
+- Repositories for database access. Domain-Driven Design where it makes sense. DTOs for input/output where appropriate.
+- Use constructor property promotion. Use `readonly` for DTOs and value objects.
+- Prefer fluent setters for entities and value objects.
+- Don't write PHPDoc unless it adds information.
 
 ## Code style
 
-Symfony's coding standard, the `@Symfony` php-cs-fixer ruleset (a PSR-12-derived
-superset). Run `vendor/bin/php-cs-fixer fix` if `friendsofphp/php-cs-fixer` is
-installed; it isn't part of the skeleton by default.
+Follow the `@Symfony` php-cs-fixer ruleset. If `friendsofphp/php-cs-fixer` is installed, run `vendor/bin/php-cs-fixer fix`. If `phpstan/phpstan` is installed, run `php vendor/bin/phpstan analyse <changed files> --no-progress`.
+
+- `declare(strict_types=1);` in every PHP file. One class per file.
+- Use `final` classes unless the class is meant to be extended.
+- Keep methods short (ideally under 30–40 lines). Prefer early returns.
+- Type all class constants, e.g. `private const string ROUTE_PREFIX = 'app_';`.
+- New model and entity classes use `private` constructor-promoted properties (never `public`) and expose them through getters.
+- Never leave `dd()`, `dump()`, or `exit()` in committed code.
+
+## Everyday workflow
+
+- Run the app with `symfony serve -d`, and commands with `symfony console ...` (or `bin/console`).
+- Common checks: `php bin/console cache:clear`, `APP_ENV=prod php bin/console lint:container` (after major changes), `php bin/console lint:twig <file>`, `php bin/console lint:yaml config`.
+- When something fails, read `var/log/dev.log` and `/_profiler` before changing code.
+- If `maker-bundle` is installed, use `bin/console make:*` with all arguments and `--no-interaction`. Makers prompt by default and hang a non-interactive shell. If a maker still needs input, hand-write the code.
+- If Doctrine ORM is installed, schema changes go through `make:migration` then `doctrine:migrations:migrate`. Never `doctrine:schema:update` or hand-written SQL.
+- `created_at` columns use `DEFAULT CURRENT_TIMESTAMP` in the migration. The entity maps `created_at` read-only, and app code never writes it.
+- `.env` is committed and holds defaults only. Real secrets go in `.env.local` (git-ignored) or `bin/console secrets:set`, read via `%env(...)%`.
+- Never commit `.env.local` or files containing secrets.
+- Validate all user input. Use the Security component properly. Escape output in templates.
+- Never run `git add` or `git commit`. Leave staging and committing to the user.
+
+## Testing
+
+Install `symfony/test-pack` if it isn't already. Use `WebTestCase` for HTTP and controller tests, and `KernelTestCase` for service tests. Run `php bin/phpunit` (falls back to `vendor/bin/phpunit`), scoped to the changed test file and piped through `tail -30`.
+
+A feature isn't done until a test exercises it the way a caller would: an HTTP request for a controller, or a service call for a service. Always add or update tests for new or changed features. Mock HTTP clients and external services. Prefer PHPUnit `assert*()` methods.
 
 ## Discover, don't guess
 
-Framework APIs change between versions and your training data may be stale. Look
-things up in the project instead of relying on memory:
+Framework APIs change between versions, so check the project instead of relying on memory:
 
-- `bin/console about`: versions, environment, paths.
-- `bin/console debug:router`, `debug:container`, `debug:autowiring <name>`,
-  `debug:config <bundle>`, `config:dump-reference <bundle>`: what exists and how
-  it is configured.
-- `bin/console lint:container`, plus `lint:twig templates/` and
-  `lint:yaml config/` where those packages are installed: validate before running.
-- Read the installed source and docblocks under `vendor/`.
-- Docs: https://symfony.com/doc/current/ (switch to the version matching
-  `composer.json` if it differs).
+- `bin/console about`, `debug:router`, `debug:container`, `debug:autowiring <name>`, `debug:config <bundle>`, `config:dump-reference <bundle>`.
+- `bin/console lint:container`, plus `lint:twig templates/` and `lint:yaml config/` where those packages are installed.
+- Read the installed source and docblocks under `vendor/`. Docs: https://symfony.com/doc/current/ (switch to the version in `composer.json`).

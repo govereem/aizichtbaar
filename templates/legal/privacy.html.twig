@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Privacybeleid — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 py-12 space-y-8 text-gray-700">
+    <h1 class="text-4xl font-bold text-[#1E6B3A]">Privacybeleid</h1>
+    <p class="text-sm text-gray-500">Laatst bijgewerkt: 30 oktober 2026</p>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">1. Wie we zijn</h2>
+        <p>AIzichtbaar is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in dit privacybeleid. Wij zijn gevestigd te Leeuwarden, ingeschreven bij de Kamer van Koophandel onder nummer 82005222, gevestigd aan Gerben Colmjonwei 109, 8915 GJ Leeuwarden. Contact: support@aizichtbaar.nl.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">2. Welke gegevens we verwerken</h2>
+        <ul class="list-disc pl-6 space-y-1">
+            <li><strong>Accountgegevens:</strong> e-mailadres en een wachtwoord, dat wij alleen in gehashte vorm opslaan.</li>
+            <li><strong>Scangegevens:</strong> de website-URL die je invoert, eventuele concurrentie-URL's, en het Rapport met de resultaten van de scan.</li>
+            <li><strong>Betalingsgegevens:</strong> bij een uitgebreide scan verwerken wij via Mollie de betaalstatus en het betaalkenmerk. Wij zien geen creditcard- of bankgegevens.</li>
+            <li><strong>Contactgegevens:</strong> naam, e-mailadres en bericht die je via het contactformulier stuurt.</li>
+            <li><strong>Technische gegevens:</strong> IP-adres, tijdstip van bezoek en gegevens in de serverlogs.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">3. Waarvoor we gegevens gebruiken</h2>
+        <ul class="list-disc pl-6 space-y-1">
+            <li>Het aanmaken en beheren van je account, en het inloggen.</li>
+            <li>Het uitvoeren van een scan en het per e-mail sturen van je Rapport.</li>
+            <li>Het verwerken van betalingen en het bijhouden van de administratie.</li>
+            <li>Het beantwoorden van je vragen via het contactformulier.</li>
+            <li>Het beveiligen van de dienst en het tegengaan van misbruik, zoals het blokkeren van IP-adressen.</li>
+        </ul>
+        <p class="mt-2">De grondslagen zijn de uitvoering van de overeenkomst (artikel 6 lid 1 sub b AVG), een wettelijke verplichting voor de administratie (sub c), en ons gerechtvaardigd belang bij beveiliging en het tegengaan van misbruik (sub f).</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">4. Openbare scanpagina's</h2>
+        <p>Bij een gratis scan kan de website na afloop op onze pagina <a href="{{ path('app_public_sites') }}" class="underline">Gescande websites</a> worden getoond. Het gaat dan om de domeinnaam, de naam van het bedrijf, een korte samenvatting, de score en de uitkomsten van de controles. Accountscans worden nooit openbaar gemaakt.</p>
+        <p class="mt-2">Een website die niet vermeld wil worden, kun je via het contactformulier laten verwijderen. Wij verwijderen de pagina dan en nemen het domein niet opnieuw op.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">5. Geautomatiseerde verwerking met AI</h2>
+        <p>Wij gebruiken AI-diensten om de inhoud van een website te analyseren, samen te vatten en een actieplan op te stellen. De AI-analyse levert een indicatie op. Er worden geen besluiten genomen die voor jou rechtsgevolgen hebben of je anderszins in aanmerkelijke mate treffen.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">6. Met wie we gegevens delen</h2>
+        <p>Wij delen gegevens alleen met partijen die we nodig hebben voor de dienst:</p>
+        <ul class="list-disc pl-6 space-y-1 mt-2">
+            <li><strong>Anthropic</strong> (AI-analyse van de inhoud van de door jou opgegeven website). Dit gebeurt buiten de Europese Economische Ruimte.</li>
+            <li><strong>Mollie</strong> (verwerking van betalingen).</li>
+            <li><strong>Hostingprovider en mailprovider</strong> (opslag van gegevens en verzending van e-mails).</li>
+            <li><strong>Accountant</strong>, voor zover een wettelijke verplichting dat vereist.</li>
+        </ul>
+        <p class="mt-2">Met verwerkers sluiten wij een verwerkersovereenkomst. Wij verkopen je gegevens niet.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">7. Hoe lang we gegevens bewaren</h2>
+        <p>Wij bewaren gegevens niet langer dan nodig is voor het doel waarvoor ze zijn verzameld, of zolang de wet dat vereist. Administratieve gegevens over betalingen bewaren wij zeven jaar. Accountgegevens verwijderen wij na beëindiging van je account, tenzij een wettelijke bewaarplicht geldt.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">8. Minderjarigen</h2>
+        <p>Onze dienst is bedoeld voor personen van 16 jaar en ouder. Wij verzamelen niet bewust gegevens van jongere kinderen. Als je denkt dat wij toch gegevens van een kind hebben verzameld, neem dan contact met ons op, dan verwijderen wij die.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">9. Jouw rechten</h2>
+        <p>Je hebt het recht om je gegevens in te zien, te laten corrigeren of verwijderen, het verwerken te beperken, je gegevens over te laten dragen, bezwaar te maken en een eerder gegeven toestemming in te trekken. Stuur hiervoor een e-mail naar support@aizichtbaar.nl. Wij reageren binnen vier weken. Wij vragen je om je identiteit vast te stellen voordat wij je gegevens verstrekken.</p>
+        <p class="mt-2">Ben je het niet eens met hoe wij met je gegevens omgaan? Dan kun je een klacht indienen bij de <a href="https://autoriteitpersoonsgegevens.nl" class="underline" rel="noopener">Autoriteit Persoonsgegevens</a>.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">10. Beveiliging</h2>
+        <p>Wij nemen passende technische en organisatorische maatregelen om je gegevens te beschermen. De website is alleen bereikbaar via een versleutelde verbinding (HTTPS). Wachtwoorden worden gehasht opgeslagen. Toegang tot persoonsgegevens is beperkt tot personen die die nodig hebben.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">11. Cookies</h2>
+        <p>Wij gebruiken alleen cookies die nodig zijn om de website te laten werken, zoals een sessiecookie om je in te laten loggen. Wij gebruiken geen tracking- of marketingcookies.</p>
+    </section>
+
+    <section>
+        <h2 class="text-2xl font-bold mb-2">12. Wijzigingen</h2>
+        <p>Wij kunnen dit privacybeleid aanpassen. De meest recente versie staat op deze pagina. Bij ingrijpende wijzigingen laten wij dat duidelijk weten.</p>
+    </section>
+</div>
+{% endblock %}

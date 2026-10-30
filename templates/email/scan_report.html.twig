@@ -1,0 +1,12 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Je uitgebreide AI-scan is klaar — AIzichtbaar{% endblock %}
+
+{% block content %}
+    <p style="margin:0 0 16px 0;">Hoi,</p>
+    <p style="margin:0 0 16px 0;">Je uitgebreide AI-scan voor <strong>{{ scan.websiteUrl }}</strong> is klaar. Daarin staan je score, de AI-antwoordsimulatie, een actieplan met uitleg per stap, de vergelijking met je concurrenten en kant-en-klare bestanden zoals llms.txt.</p>
+
+    {% include 'email/_button.html.twig' with {url: url('app_scan_result', {publicId: scan.publicId}), label: 'Bekijk je rapport'} %}
+
+    <p style="margin:0; font-size:14px; color:#6b7280;">Bewaar deze link. Iedereen met de link kan het rapport zien.</p>
+{% endblock %}

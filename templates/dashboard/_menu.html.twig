@@ -1,0 +1,14 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set menuItems = [
+    {route: 'app_dashboard', label: 'Dashboard'},
+    {route: 'app_dashboard_scans', label: 'Mijn scans'},
+    {route: 'app_scan', label: 'Nieuwe scan'},
+] %}
+<nav class="w-56 shrink-0 bg-white rounded-xl shadow-sm p-4 h-fit space-y-1" aria-label="Dashboard menu">
+    {% for item in menuItems %}
+        {% set active = currentRoute == item.route %}
+        <a href="{{ path(item.route) }}"
+           class="block px-3 py-2 rounded-lg {{ active ? 'bg-green-50 text-[#1E6B3A] font-semibold' : 'text-gray-600 hover:bg-gray-50' }}"
+           {{ active ? 'aria-current="page"' : '' }}>{{ item.label }}</a>
+    {% endfor %}
+</nav>

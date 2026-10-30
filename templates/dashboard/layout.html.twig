@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="max-w-6xl mx-auto px-4 py-16 flex gap-8">
+    {% include 'dashboard/_menu.html.twig' %}
+
+    <div class="flex-1 min-w-0">
+        {% block dashboard_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

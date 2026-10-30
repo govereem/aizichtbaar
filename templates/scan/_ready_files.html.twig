@@ -1,0 +1,33 @@
+{# Expects: files (llms_txt, organization_json_ld, robots_snippet), example (bool) and homepage_only (bool) #}
+<div class="mb-8">
+    <h2 class="text-xl font-bold mb-2">Kant-en-klare bestanden</h2>
+    <p class="text-sm text-gray-500 mb-4">
+        {% if example %}Zo zien de bestanden eruit voor een fictief bedrijf. Die van jou krijg je na een scan.{% else %}Drie bestanden die je website beter vindbaar maken voor AI-systemen. Hieronder staat per bestand wat het is en waarvoor je het gebruikt.{% endif %}
+        {% if homepage_only %}De bestanden zijn gebaseerd op je homepage. De uitgebreide scan bouwt ze op uit al je belangrijke pagina's.{% endif %}
+    </p>
+
+    <div id="file-robots" class="bg-white border rounded-xl p-4 mb-4 scroll-mt-4">
+        <h3 class="font-semibold">robots.txt</h3>
+        <p class="text-sm text-gray-700 mt-2"><strong>Wat is het?</strong> Een tekstbestand in de hoofdmap van je site dat zoekrobots en AI-crawlers vertelt welke pagina's ze mogen bezoeken.</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>Waarvoor?</strong> Veel AI-crawlers kijken eerst naar dit bestand. Staat er niets over, dan mogen ze in principe. Een expliciete toestemming maakt duidelijk dat je zichtbaar wilt zijn, en voorkomt dat een oude blokkade je onzichtbaar maakt.</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>Waar zet je het?</strong> Als <code>/robots.txt</code> in de hoofdmap. Voeg de regels toe aan een bestaand bestand, maak geen tweede bestand.</p>
+        <pre class="bg-gray-50 border rounded-lg p-3 text-xs whitespace-pre-wrap mt-3">{{ files.robots_snippet }}</pre>
+    </div>
+
+    <div id="file-llms" class="bg-white border rounded-xl p-4 mb-4 scroll-mt-4">
+        <h3 class="font-semibold">llms.txt</h3>
+        <p class="text-sm text-gray-700 mt-2"><strong>Wat is het?</strong> Een kort Markdown-bestand met een samenvatting van je bedrijf en de belangrijkste pagina's van je site, speciaal voor AI-systemen.</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>Waarvoor?</strong> Een taalmodel ziet zo in één oogopslag wat je doet en welke pagina's ertoe doen, zonder je hele site te lezen. Nog niet elk AI-systeem gebruikt dit bestand, dus het is een aanvulling en geen garantie.</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>Waar zet je het?</strong> Als <code>/llms.txt</code> in de hoofdmap. Pas de beschrijving en de links aan, zodat ze kloppen met je eigen site.</p>
+        <pre class="bg-gray-50 border rounded-lg p-3 text-xs whitespace-pre-wrap mt-3">{{ files.llms_txt }}</pre>
+    </div>
+
+    <div id="file-jsonld" class="bg-white border rounded-xl p-4 scroll-mt-4">
+        <h3 class="font-semibold">Organization-markup (JSON-LD)</h3>
+        <p class="text-sm text-gray-700 mt-2"><strong>Wat is het?</strong> Gestructureerde gegevens in de code van je homepage, in het schema.org-formaat. Ze zeggen: dit is een organisatie, met deze naam, website en social profielen.</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>Waarvoor?</strong> Zoekmachines en AI-systemen weten dan zeker welk bedrijf achter de site zit, en koppelen je naam aan je website en profielen.</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>Waar zet je het?</strong> In een <code>&lt;script type="application/ld+json"&gt;</code>-blok in de <code>&lt;head&gt;</code> van je homepage. Controleer het daarna met de Rich Results Test van Google.</p>
+        <pre class="bg-gray-50 border rounded-lg p-3 text-xs whitespace-pre-wrap mt-3">{{ files.organization_json_ld }}</pre>
+        <p class="text-sm text-gray-700 mt-2"><strong>sameAs</strong> koppelt je site aan je profielen. Hieronder staan voorbeelden van veelgebruikte profielen zoals LinkedIn, YouTube, Instagram, Facebook en X. Vervang ze door je eigen links, of haal de regels weg die je niet gebruikt.</p>
+    </div>
+</div>

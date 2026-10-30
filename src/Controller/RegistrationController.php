@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -8,6 +10,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -23,6 +26,7 @@ class RegistrationController extends AbstractController
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private MailerInterface $mailer,
         private EntityManagerInterface $entityManager,
+        #[Autowire('%mail.from%')] private string $mailFrom,
     ) {
     }
 
@@ -50,7 +54,7 @@ class RegistrationController extends AbstractController
             );
 
             $this->mailer->send((new TemplatedEmail())
-                ->from(new Address('noreply@aizichtbaar.nl', 'AIzichtbaar'))
+                ->from(Address::create($this->mailFrom))
                 ->to((string) $user->getEmail())
                 ->subject('Bevestig je e-mailadres — AIzichtbaar')
                 ->htmlTemplate('registration/confirmation_email.html.twig')

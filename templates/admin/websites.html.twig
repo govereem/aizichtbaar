@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Beheer: websites — AIzichtbaar{% endblock %}
+
+{% block body %}
+<div class="max-w-6xl mx-auto px-4 py-12">
+    <h1 class="text-2xl font-bold mb-6">Gescande websites</h1>
+
+    <div class="bg-white border rounded-xl divide-y">
+        {% for site in sites %}
+            <div class="p-4 flex flex-wrap justify-between items-center gap-4 text-sm">
+                <div>
+                    <div class="font-semibold">{{ site.domain }}</div>
+                    <div class="text-gray-500">{{ site.name }} · score {{ site.score }} · status <strong>{{ site.status }}</strong></div>
+                </div>
+                <div class="flex gap-2">
+                    {% for status, label in {indexable: 'Publiceer', noindex: 'Verberg (noindex)', removed: 'Verwijder'} %}
+                        {% if site.status != status %}
+                            <form method="post" action="{{ path('app_admin_website_status', {id: site.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('website-status-' ~ site.id) }}">
+                                <input type="hidden" name="status" value="{{ status }}">
+                                <button type="submit" class="px-3 py-1 rounded-lg border text-xs {{ status == 'removed' ? 'text-red-700 border-red-200' : 'text-[#1E6B3A] border-[#1E6B3A]' }}">{{ label }}</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                    <a href="{{ path('app_public_site_show', {slug: site.slug}) }}" class="px-3 py-1 text-xs text-gray-600 underline">Bekijk</a>
+                </div>
+            </div>
+        {% else %}
+            <p class="p-4 text-gray-600">Nog geen websites gescand.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

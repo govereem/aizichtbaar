@@ -1,5 +1,18 @@
 parameters:
     mollie.api_key: '%env(MOLLIE_API_KEY)%'
+    # Set SCAN_PAID_ENABLED=1 in .env.local once the paid scan has produced good results on real sites.
+    scan.paid_enabled: '%env(bool:SCAN_PAID_ENABLED)%'
+    scan.paid_price: '49.00'
+    mail.from: '%env(MAIL_FROM)%'
+    anthropic.api_key: '%env(default::ANTHROPIC_API_KEY)%'
+    anthropic.model: 'claude-sonnet-5-5'
+    # Only sites on these top-level domains get a public page. Other scans still run, they just are not published.
+    scan.public_tlds: '%env(csv:SCAN_PUBLIC_TLDS)%'
+    # Hosts that never get a public page, whatever their TLD.
+    scan.public_blocklist: []
+    # auto: new pages are indexable when the AI summary passes. approval: new pages stay noindex until an admin publishes them.
+    scan.indexing_mode: '%env(SCAN_INDEXING_MODE)%'
+    scan.contact_email: '%env(SCAN_CONTACT_EMAIL)%'
 
 services:
     _defaults:
@@ -12,3 +25,14 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    # Blocks requests to private and loopback addresses, including after redirects.
+    app.scan.http_client:
+        class: Symfony\Component\HttpClient\NoPrivateNetworkHttpClient
+        arguments: ['@http_client']
+
+when@test:
+    services:
+        # Tests never reach the network. Scans still run the real checks against empty responses.
+        app.scan.http_client:
+            class: Symfony\Component\HttpClient\MockHttpClient

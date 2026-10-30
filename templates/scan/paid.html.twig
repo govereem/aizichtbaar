@@ -13,11 +13,13 @@
 
         <h3>Wat zit erin?</h3>
         <ul>
-            <li><strong>Diepgaande AI-audit</strong> – We checken of AI-crawlers toegang hebben, of je content citeerbaar is en hoe consistent je merk is.</li>
-            <li><strong>Score + concurrentie-inzicht</strong> – Zie hoe je scoort en waar concurrenten je voorbijstreven.</li>
-            <li><strong>Concrete actiepunten</strong> – Geen vage adviezen, maar precies wat je moet aanpassen.</li>
-            <li><strong>Content-suggesties</strong> – Voorbeelden van answer-first teksten die AI graag citeert.</li>
-            <li><strong>Rapport per e-mail</strong> – Alles overzichtelijk op een rij, zodat je (of je bureau) direct aan de slag kan.</li>
+            <li><strong>Audit van meerdere pagina's</strong> – We checken niet alleen je homepage, maar ook je belangrijkste pagina's, en of AI-crawlers er toegang toe hebben.</li>
+            <li><strong>AI-antwoordsimulatie</strong> – We stellen de vragen die klanten aan een AI-assistent stellen, en laten zien of je website daarin wordt geciteerd. Dit is een simulatie op basis van je eigen website, geen live zoekresultaat.</li>
+            <li><strong>Actieplan met uitleg</strong> – Per verbeterpunt: waarom het ertoe doet, welke stappen je zet en hoe veel werk het kost.</li>
+            <li><strong>Concurrentievergelijking</strong> – Vergelijk je met maximaal drie concurrenten en zie waar zij wel doen wat jij niet doet.</li>
+            <li><strong>Voorbeeldteksten</strong> – Antwoordgerichte alinea's die je direct kunt overnemen op je belangrijkste pagina's.</li>
+            <li><strong>Kant-en-klare bestanden voor je hele site</strong> – Een llms.txt met al je belangrijke pagina's, Organization-markup (JSON-LD) en robots.txt-regels.</li>
+            <li><strong>Rapport per e-mail</strong> – Een link naar je volledige rapport, zodat je (of je bureau) direct aan de slag kunt.</li>
         </ul>
 
         <h3>Waarom je dit wilt</h3>
@@ -30,10 +32,23 @@
             <input type="url" name="website" required placeholder="https://jouwwebsite.nl"
                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]">
         </div>
+        {% if not app.user %}
+            <div>
+                <label class="block font-medium mb-1">E-mailadres voor je rapport</label>
+                <input type="email" name="email" required placeholder="jij@bedrijf.nl"
+                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]">
+            </div>
+        {% endif %}
+        <div>
+            <label class="block font-medium mb-1">Concurrenten (optioneel, max. 3)</label>
+            <textarea name="competitors" rows="3" placeholder="https://concurrent-een.nl&#10;https://concurrent-twee.nl"
+                      class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#1E6B3A]"></textarea>
+            <p class="text-xs text-gray-500 mt-1">Één website per regel.</p>
+        </div>
         <button type="submit" class="w-full btn-primary text-white py-4 rounded-lg font-semibold text-lg">
             Betaal €49 en start de scan
         </button>
-        <p class="text-xs text-center text-gray-500">Veilig betalen via Mollie (iDEAL, creditcard, etc.)</p>
+        <p class="text-xs text-center text-gray-500">Veilig betalen via Mollie (iDEAL, creditcard, etc.). Door te betalen ga je akkoord met de <a href="{{ path('app_terms') }}" class="underline">algemene voorwaarden</a>.</p>
     </form>
 </div>
 {% endblock %}

@@ -3,6 +3,8 @@
 {% block title %}Scan Resultaat — AIzichtbaar{% endblock %}
 
 {% block body %}
+{% set results = scan.results ?? {} %}
+{% set inProgress = scan.status in ['queued', 'running', 'paid'] %}
 <div class="max-w-3xl mx-auto px-4 py-12">
     <div class="mb-6">
         <a href="{{ path('app_scan') }}" class="text-[#1E6B3A] text-sm font-medium">← Terug naar scans</a>
@@ -21,101 +23,209 @@
         </div>
         <p class="text-gray-500 text-sm mb-6">{{ scan.websiteUrl }}</p>
 
-        <div class="flex items-center gap-8 mb-8">
-            <div class="text-center">
-                <div class="text-6xl font-bold text-[#1E6B3A]">{{ scan.results.score ?? '—' }}</div>
-                <div class="text-gray-500 text-sm">/ 100</div>
+        {% if scan.status == 'failed' %}
+            <div class="p-4 bg-red-50 text-red-700 rounded-lg text-sm">
+                {{ scan.failureReason }}
             </div>
-            <div>
-                <p class="font-medium">{{ scan.results.summary ?? 'Scan voltooid' }}</p>
-                {% if scan.type == 'free' %}
-                    <p class="text-sm text-gray-500 mt-1">Dit is een snelle basischeck. De uitgebreide scan geeft concrete acties en voorbeelden.</p>
-                {% endif %}
+        {% elseif scan.status == 'pending' %}
+            <div class="p-4 bg-yellow-50 rounded-lg text-sm">
+                Betaling wordt nog verwerkt. Deze pagina ververst zichzelf.
             </div>
-        </div>
-
-        {% if scan.type == 'paid' and scan.status != 'paid' %}
-            <div class="p-4 bg-yellow-50 rounded-lg text-sm mb-6">
-                Betaling wordt nog verwerkt. Vernieuw de pagina zo.
+        {% elseif inProgress %}
+            <div class="p-4 bg-blue-50 rounded-lg text-sm">
+                Je scan wordt uitgevoerd. Deze pagina ververst zichzelf zodra het resultaat klaar is.
+            </div>
+        {% else %}
+            <div class="flex items-center gap-8">
+                <div class="text-center">
+                    <div class="text-6xl font-bold text-[#1E6B3A]">{{ results.score ?? '—' }}</div>
+                    <div class="text-gray-500 text-sm">/ 100</div>
+                </div>
+                <div>
+                    <p class="font-medium">{{ results.summary ?? 'Scan voltooid' }}</p>
+                    {% if scan.type == 'free' %}
+                        <p class="text-sm text-gray-500 mt-1">Dit is een snelle basischeck met een basis-actieplan en kant-en-klare bestanden. De uitgebreide scan legt per stap uit hoe je het aanpakt.</p>
+                    {% endif %}
+                </div>
             </div>
         {% endif %}
     </div>
 
-    {# GRATIS RESULTAAT #}
-    {% if scan.type == 'free' and scan.results.points is defined %}
+    {% if results.checks is defined %}
+        {% set fileAnchors = {ai_crawlers: 'file-robots', llms_txt: 'file-llms', entity: 'file-jsonld'} %}
         <div class="space-y-3 mb-8">
-            {% for point in scan.results.points %}
+            {% for check in results.checks %}
+                {% set fileAnchor = fileAnchors[check.id] ?? null %}
                 <div class="bg-white border rounded-xl p-4 flex gap-4">
                     <div class="text-2xl">
-                        {% if point.status == 'ok' %}✅{% elseif point.status == 'warning' %}⚠️{% else %}❌{% endif %}
+                        {% if check.status == 'ok' %}✅{% elseif check.status == 'warning' %}⚠️{% else %}❌{% endif %}
                     </div>
                     <div>
-                        <div class="font-semibold">{{ point.title }}</div>
-                        <div class="text-sm text-gray-600">{{ point.text }}</div>
+                        <div class="font-semibold">{{ check.title }}</div>
+                        <div class="text-sm text-gray-600">{{ check.detail }}</div>
+                        {% if fileAnchor and check.status != 'ok' and results.content ?? false %}
+                            <a href="#{{ fileAnchor }}" class="text-sm text-[#1E6B3A] font-medium inline-block mt-1">Naar het kant-en-klare bestand ↓</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
         </div>
+    {% endif %}
 
+    {% if results.actions is defined %}
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Actieplan</h2>
+            {% if scan.type == 'free' %}
+                <p class="text-sm text-gray-500 mb-4">Deze stappen volgen uit de controles hierboven. De uitgebreide scan legt per stap uit waarom het telt en hoe je het aanpakt.</p>
+            {% elseif results.basic_advice ?? false %}
+                <p class="text-sm text-gray-500 mb-4">Deze adviezen volgen uit de controles hierboven. Een uitgebreide uitleg per stap kon nu niet worden gemaakt.</p>
+            {% endif %}
+            <div class="space-y-3">
+                {% for action in results.actions %}
+                    <div class="bg-white border rounded-xl p-4">
+                        <div class="flex justify-between items-start gap-4">
+                            <div>
+                                <div class="font-semibold">{{ action.title }}</div>
+                                <p class="text-sm text-gray-600 mt-1">{{ action.text }}</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded-full whitespace-nowrap
+                                {% if action.impact == 'Hoog' %}bg-red-100 text-red-700
+                                {% elseif action.impact == 'Medium' %}bg-yellow-100 text-yellow-700
+                                {% else %}bg-gray-100 text-gray-700{% endif %}">
+                                {{ action.impact }} impact
+                            </span>
+                        </div>
+                        {% if action.why ?? false %}
+                            <p class="text-sm mt-3"><strong>Waarom:</strong> {{ action.why }}</p>
+                        {% endif %}
+                        {% if action.steps ?? false %}
+                            <div class="text-sm mt-3">
+                                <strong>Zo los je het op{% if action.effort %} (inspanning: {{ action.effort }}){% endif %}:</strong>
+                                <ol class="list-decimal ml-5 mt-1 space-y-1">
+                                    {% for step in action.steps %}
+                                        <li>{{ step }}</li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <p class="text-sm text-gray-600">Geen verbeterpunten gevonden. Goed gedaan.</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if results.content ?? false %}
+        {% include 'scan/_ready_files.html.twig' with {files: results.content, example: false, homepage_only: scan.type == 'free'} %}
+    {% endif %}
+
+    {% if scan.type == 'paid' %}
+        {% if results.degraded ?? false %}
+            <div class="mb-8 p-4 bg-yellow-50 rounded-lg text-sm">
+                {% set stepLabels = {simulation: 'de AI-antwoordsimulatie', actions: 'de uitleg bij het actieplan', rewrites: 'de voorbeeldteksten'} %}
+                Een deel van de AI-analyse kon nu niet worden gemaakt: {% for step in results.degraded_steps ?? [] %}{{ stepLabels[step] ?? step }}{% if not loop.last %}, {% endif %}{% endfor %}{% if not (results.degraded_steps ?? []) %}onderdelen{% endif %}. De overige onderdelen staan hieronder.
+            </div>
+        {% endif %}
+
+        {% if results.pages ?? false %}
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-2">Pagina's die we hebben bekeken</h2>
+                <ul class="bg-white border rounded-xl divide-y">
+                    {% for page in results.pages %}
+                        <li class="p-3 flex justify-between gap-4 text-sm">
+                            <span class="break-all">{{ page.url }}</span>
+                            <span class="font-semibold whitespace-nowrap">{{ page.score }} / 100</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if results.simulation ?? false %}
+            {% set questions = results.simulation.questions %}
+            {% set cited = questions|filter(q => q.verdict == 'cited')|length %}
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-2">AI-antwoordsimulatie</h2>
+                <p class="text-sm text-gray-500 mb-4">
+                    Je wordt geciteerd in {{ cited }} van de {{ questions|length }} antwoorden.
+                    Hieronder staat hoe een AI-assistent zou antwoorden op vragen van klanten{% if results.simulation.niche %} in jouw branche ({{ results.simulation.niche }}){% endif %},
+                    op basis van alleen je eigen website. Dit is een simulatie, geen live zoekresultaat.
+                </p>
+                <div class="space-y-3">
+                    {% for item in questions %}
+                        <div class="bg-white border rounded-xl p-4">
+                            <div class="flex justify-between items-start gap-4">
+                                <div class="font-semibold">{{ item.question }}</div>
+                                <span class="text-xs px-2 py-1 rounded-full whitespace-nowrap
+                                    {% if item.verdict == 'cited' %}bg-green-100 text-[#1E6B3A]
+                                    {% elseif item.verdict == 'mentioned' %}bg-yellow-100 text-yellow-700
+                                    {% else %}bg-red-100 text-red-700{% endif %}">
+                                    {% if item.verdict == 'cited' %}Geciteerd{% elseif item.verdict == 'mentioned' %}Genoemd{% else %}Niet gevonden{% endif %}
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-700 mt-2">{{ item.answer }}</p>
+                            <p class="text-xs text-gray-500 mt-2">{{ item.reason }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if results.competitors ?? false %}
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-2">Vergelijking met concurrenten</h2>
+                <div class="space-y-3">
+                    {% for competitor in results.competitors %}
+                        <div class="bg-white border rounded-xl p-4">
+                            <div class="flex justify-between gap-4 text-sm">
+                                <span class="break-all font-semibold">{{ competitor.url }}</span>
+                                <span class="whitespace-nowrap">{% if competitor.error %}{{ competitor.error }}{% else %}{{ competitor.score }} / 100{% endif %}</span>
+                            </div>
+                            {% if competitor.gaps %}
+                                <p class="text-sm text-gray-600 mt-2">Wat zij wel doen en jij niet:</p>
+                                <ul class="list-disc ml-5 text-sm">
+                                    {% for gap in competitor.gaps %}
+                                        <li>{{ gap }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if results.rewrites ?? false %}
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-2">Voorbeeldteksten (answer-first)</h2>
+                <p class="text-sm text-gray-500 mb-4">Een korte alinea die direct antwoord geeft op de vraag in de kop. AI-assistenten nemen zulke alinea's graag over. Pas ze aan waar nodig.</p>
+                <div class="space-y-3">
+                    {% for rewrite in results.rewrites %}
+                        <div class="bg-white border rounded-xl p-4">
+                            <div class="font-semibold">{{ rewrite.heading }}</div>
+                            <div class="text-xs text-gray-500 break-all">{{ rewrite.url }}</div>
+                            <p class="text-sm text-gray-700 mt-2">{{ rewrite.answer }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+    {% endif %}
+
+    {% if scan.type == 'free' and scan_paid_enabled and results.checks is defined %}
         <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
             <h3 class="font-bold text-lg mb-2">Wil je weten wat je precies moet doen?</h3>
-            <p class="text-gray-600 mb-4 text-sm">De uitgebreide scan van €49 geeft concrete actiepunten, impact-indicatie en contentvoorbeelden.</p>
+            <p class="text-gray-600 mb-4 text-sm">De uitgebreide scan van €49 legt bij elke stap uit wat je doet en waarom. Daarnaast krijg je een AI-antwoordsimulatie, een concurrentievergelijking, voorbeeldteksten en bestanden voor al je pagina's.</p>
             <a href="{{ path('app_scan_paid') }}" class="inline-block btn-primary text-white px-6 py-3 rounded-lg font-semibold">
                 Bekijk de uitgebreide scan →
             </a>
         </div>
-
-    {# BETAALDE RESULTAAT #}
-    {% elseif scan.type == 'paid' and scan.results.actions is defined %}
-        <div class="mb-8">
-            <h2 class="text-xl font-bold mb-4">Diepgaande analyse</h2>
-            <div class="space-y-3">
-                {% for item in scan.results.analysis %}
-                    <div class="bg-white border rounded-xl p-4">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span>
-                                {% if item.status == 'ok' %}✅{% elseif item.status == 'warning' %}⚠️{% else %}❌{% endif %}
-                            </span>
-                            <span class="font-semibold">{{ item.title }}</span>
-                        </div>
-                        <p class="text-sm text-gray-600">{{ item.detail }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="mb-8">
-            <h2 class="text-xl font-bold mb-4">Concrete actiepunten</h2>
-            <div class="space-y-3">
-                {% for action in scan.results.actions %}
-                    <div class="bg-white border rounded-xl p-4 flex justify-between items-start gap-4">
-                        <div>
-                            <div class="font-semibold">{{ action.title }}</div>
-                            <p class="text-sm text-gray-600 mt-1">{{ action.text }}</p>
-                        </div>
-                        <span class="text-xs px-2 py-1 rounded-full whitespace-nowrap
-                            {% if action.impact == 'Hoog' %}bg-red-100 text-red-700
-                            {% elseif action.impact == 'Medium' %}bg-yellow-100 text-yellow-700
-                            {% else %}bg-gray-100 text-gray-700{% endif %}">
-                            {{ action.impact }} impact
-                        </span>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        {% if scan.results.content_example is defined %}
-            <div class="bg-white border rounded-xl p-6">
-                <h2 class="text-xl font-bold mb-3">Content voorbeeld</h2>
-                <div class="text-sm font-medium text-[#1E6B3A] mb-1">{{ scan.results.content_example.title }}</div>
-                <p class="text-gray-700 italic">“{{ scan.results.content_example.text }}”</p>
-            </div>
-        {% endif %}
-
-    {% else %}
-        <div class="text-center text-gray-500 py-8">
-            Resultaat wordt geladen…
-        </div>
     {% endif %}
 </div>
+
+{% if inProgress or scan.status == 'pending' %}
+    <script>setTimeout(() => location.reload(), 4000);</script>
+{% endif %}
 {% endblock %}

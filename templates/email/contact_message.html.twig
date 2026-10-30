@@ -1,0 +1,10 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Nieuw bericht via het contactformulier — AIzichtbaar{% endblock %}
+
+{% block content %}
+    <p style="margin:0 0 16px 0;"><strong>Naam:</strong> {{ visitorName }}</p>
+    <p style="margin:0 0 16px 0;"><strong>E-mailadres:</strong> {{ visitorEmail }}</p>
+    <p style="margin:0 0 8px 0;"><strong>Bericht:</strong></p>
+    <p style="margin:0; white-space:normal;">{{ text|nl2br }}</p>
+{% endblock %}
